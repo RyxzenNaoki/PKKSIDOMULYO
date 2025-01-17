@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Register</title>
+
+  <!-- Favicons -->
+  <link href="../../../assets/img/iconfix.png" rel="icon">
+  <link href="../../../assets/img/iconfix.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../../../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../../../assets/css/style.css" rel="stylesheet">
+
+  <!-- Firebase SDKs via CDN
+<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js"></script> -->
+
+
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+
+      <!-- Register Section -->
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <!-- Logo -->
+              <div class="d-flex justify-content-center py-4">
+                <a href="index.html" class="logo d-flex align-items-center w-auto">
+                  <img src="../../../assets/img/iconfix.png" alt="logo" />
+                  <span class="d-none d-lg-block">Register</span>
+                </a>
+              </div><!-- End Logo -->
+
+              <div class="card mb-3">
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+                    <p class="text-center small">Enter your personal details to create an account</p>
+                  </div>
+
+                  <!-- Registration Form -->
+                  <form id="registerForm" class="row g-3 needs-validation" novalidate>
+                    <!-- Email Input -->
+                    <div class="col-12">
+                      <label for="email" class="form-label">Your Email</label>
+                      <input type="email" id="email" class="form-control" placeholder="Enter your email" required />
+                      <div class="invalid-feedback">Please enter a valid email address!</div>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="col-12">
+                      <label for="password" class="form-label">Password</label>
+                      <input type="password" id="password" class="form-control" placeholder="Enter your password" required />
+                      <div class="invalid-feedback">Please enter your password!</div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="errorContainer" style="color: red;"></div>
+
+                    <!-- Submit Button -->
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                    </div>
+
+                    <!-- Link to login -->
+                    <div class="col-12">
+                      <p class="small mb-0">Already have an account? <a href="login.html">Log in</a></p>
+                    </div>
+                  </form>
+                  <!-- End Registration Form -->
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Register Section -->
+
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script src="../../../assets/js/main.js"></script>
+
+  <!-- Firebase Script -->
+  <script type="module" src="register.js"></script>
+  
+</body>
+
+</html>
