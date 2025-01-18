@@ -7,6 +7,5 @@
     { "src": "/form-buat", "dest": "/frontend/admin/form_buat.html" },
     { "src": "/login", "dest": "/frontend/login/login.html" },
     { "src": "/register", "dest": "/frontend/login/register.html" }
-  ],
-  "cleanUrls": true
+  ]
 }
