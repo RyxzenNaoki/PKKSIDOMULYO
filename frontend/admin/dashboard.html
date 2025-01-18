@@ -67,7 +67,7 @@
         <div class="row">
           <div class="col-md-6">
             <h3>Buat Artikel</h3>
-            <a href="form_buat.html" class="btn btn-primary">Buat</a>
+            <a href="/form-buat" class="btn btn-primary">Buat</a>
             <hr>
             <h3>Daftar Artikel</h3>
             <div id="loading" class="loading">Loading...</div>
@@ -204,7 +204,7 @@
           <td>${artikel.tanggal || '-'}</td>
           <td>
             <div class="btn-group" role="group">
-              <a href="edit_artikel.html?id=${artikel.id}" class="btn btn-sm btn-warning">Edit</a>
+              <a href="/edit-artikel?id=${artikel.id}" class="btn btn-sm btn-warning">Edit</a>
               <button class="btn btn-sm btn-danger" onclick="deleteArticle('${artikel.id}')">Hapus</button>
             </div>
           </td>

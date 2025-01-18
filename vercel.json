@@ -1,5 +1,12 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/frontend/login/login.html" }
-  ]
+  "version": 2,
+  "routes": [
+    { "src": "/", "dest": "/frontend/admin/dashboard.html" },
+    { "src": "/dashboard", "dest": "/frontend/admin/dashboard.html" },
+    { "src": "/edit-artikel", "dest": "/frontend/admin/edit_artikel.html" },
+    { "src": "/form-buat", "dest": "/frontend/admin/form_buat.html" },
+    { "src": "/login", "dest": "/frontend/login/login.html" },
+    { "src": "/register", "dest": "/frontend/login/register.html" }
+  ],
+  "cleanUrls": true
 }
