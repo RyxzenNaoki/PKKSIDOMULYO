@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/admin/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+      { "src": "/dashboard", "dest": "/frontend/admin/dashboard.html" },
+      { "src": "/login", "dest": "/frontend/admin/login/login.html" },
+      { "src": "/register", "dest": "/frontend/admin/login/register.html" },
+      { "src": "/edit_artikel", "dest": "/frontend/admin/edit_artikel.html" },
+      { "src": "/buat_artikel", "dest": "/frontend/admin/form_buat.html" }    
+  ]
+}
