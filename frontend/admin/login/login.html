@@ -112,7 +112,7 @@
         const user = userCredential.user;
         console.log("User logged in:", user);
         alert("Login berhasil!");
-        window.location.href = "../dashboard.html"; // Redirect to the dashboard page
+        window.location.href = "/dashboard"; // Redirect to the dashboard page
       } catch (error) {
         console.error("Login gagal:", error.code, error.message);
         errorMessage.textContent = `Login gagal: ${error.message}`;
