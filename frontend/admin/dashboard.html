@@ -224,7 +224,7 @@
         try {
           // Check if the article belongs to the current user before deleting
           const articleRef = doc(db, "artikel", id);
-          const articleDoc = await getDocs(articleRef);
+          const articleDoc = await getDoc(articleRef);
           
           if (!articleDoc.exists) {
             alert("Artikel tidak ditemukan");
