@@ -111,7 +111,7 @@
         currentUser = user;
         document.getElementById('userEmail').textContent = user.email;
       } else {
-        window.location.href = './login/login.html';
+        window.location.href = '/login';
       }
     });
 
@@ -119,7 +119,7 @@
     document.getElementById('logoutBtn').addEventListener('click', async () => {
       try {
         await signOut(auth);
-        window.location.href = './login/login.html';
+        window.location.href = '/login';
       } catch (error) {
         console.error('Error signing out:', error);
         alert('Gagal logout. Silakan coba lagi.');
@@ -175,7 +175,7 @@
 
         // Redirect to dashboard after 2 seconds
         setTimeout(() => {
-          window.location.href = 'dashboard.html';
+          window.location.href = '/dashboard';
         }, 2000);
 
       } catch (error) {

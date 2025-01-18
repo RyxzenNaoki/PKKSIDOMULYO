@@ -118,7 +118,7 @@
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         console.log("User registered successfully:", user);
-        window.location.href = "login.html"; // Redirect to login page
+        window.location.href = "/login"; // Redirect to login page
       } catch (error) {
         errorContainer.textContent = `Error: ${error.message}`;
         console.error("Registration error:", error.code, error.message);

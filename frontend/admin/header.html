@@ -30,7 +30,7 @@
     // Mengecek apakah username ada dalam session
     if (!user || !level) {
       // Jika tidak ada user, redirect ke halaman login
-      window.location.href = "login.html"; 
+      window.location.href = "/login"; 
     } else {
       // Menampilkan nama pengguna dan tombol logout
       const headerRight = document.getElementById('header-right');
@@ -49,7 +49,7 @@
       // Hapus informasi pengguna dari localStorage dan redirect ke login
       localStorage.removeItem('username');
       localStorage.removeItem('level');
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     });
   </script>
 
