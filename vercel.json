@@ -1,11 +1,11 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/", "dest": "/frontend/admin/dashboard.html" },
+    { "src": "/", "dest": "/frontend/admin/login/login.html" },
     { "src": "/dashboard", "dest": "/frontend/admin/dashboard.html" },
     { "src": "/edit-artikel", "dest": "/frontend/admin/edit_artikel.html" },
     { "src": "/form-buat", "dest": "/frontend/admin/form_buat.html" },
-    { "src": "/login", "dest": "/frontend/login/login.html" },
-    { "src": "/register", "dest": "/frontend/login/register.html" }
+    { "src": "/login", "dest": "/frontend/admin/login/login.html" },
+    { "src": "/register", "dest": "/frontend/admin/login/register.html" }
   ]
 }
