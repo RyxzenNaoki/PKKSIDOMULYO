@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PKK Desa Sidomulyo</title>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+      
+      <a class="logo d-flex align-items-center">
+        <h1>PKK Desa Sidomulyo</h1>
+      </a>
+
+      <div class="position-relative" id="header-right">
+        <!-- Button and logout are injected dynamically -->
+      </div>
+
+    </div>
+  </header>
+
+  <script>
+    // Mengecek apakah pengguna sudah login dari session atau localStorage
+    const user = localStorage.getItem('username');
+    const level = localStorage.getItem('level');
+
+    // Mengecek apakah username ada dalam session
+    if (!user || !level) {
+      // Jika tidak ada user, redirect ke halaman login
+      window.location.href = "login.html"; 
+    } else {
+      // Menampilkan nama pengguna dan tombol logout
+      const headerRight = document.getElementById('header-right');
+      headerRight.innerHTML = `
+        <span class="mx-2">Selamat datang, ${user}</span>
+        <a href="logout.html">
+          <button type="button" class="btn btn-primary rounded-pill">Log Out</button>
+        </a>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      `;
+    }
+
+    // Fungsi untuk logout
+    document.querySelector('a[href="logout.html"]').addEventListener('click', function(event) {
+      event.preventDefault();
+      // Hapus informasi pengguna dari localStorage dan redirect ke login
+      localStorage.removeItem('username');
+      localStorage.removeItem('level');
+      window.location.href = 'login.html';
+    });
+  </script>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
