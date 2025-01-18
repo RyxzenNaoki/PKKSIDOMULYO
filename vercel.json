@@ -2,14 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "frontend/admin/**/*",
+      "src": "PKKSIDOMULYO/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
+      "src": "/",
+      "dest": "/PKKSIDOMULYO/frontend/admin/login/login.html"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/frontend/admin/$1"
+      "dest": "/PKKSIDOMULYO/$1"
     }
   ]
 }
