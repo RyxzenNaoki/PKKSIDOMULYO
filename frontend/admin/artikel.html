@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Article Post</title>
+  <title>Article Preview</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -17,7 +15,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Vendor CSS Files -->
   <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,6 +26,23 @@
   <!-- Template Main CSS Files -->
   <link href="../../assets/css/variables.css" rel="stylesheet">
   <link href="../../assets/css/main.css" rel="stylesheet">
+
+  <style>
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+    .error-message {
+      display: none;
+      color: red;
+      text-align: center;
+      padding: 10px;
+    }
+    .back-button {
+      margin: 20px 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -36,8 +50,8 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-        <a href="" class="logo d-flex align-items-center">
-            <img src="../../assets/img/icon.png" alt="Logo" style="width: 50px; height: auto; margin-right: 10px;">
+        <a href="index.php" class="logo d-flex align-items-center">
+            <img src="assets/img/icon.png" alt="Logo" style="width: 50px; height: auto; margin-right: 10px;">
             <h1>PKK Desa Sidomulyo</h1>
         </a>
 
@@ -81,22 +95,28 @@
     </div>
 
   </header><!-- End Header -->
-
   <!-- Article Content Section -->
   <section class="single-post-content">
-    <div class="container">
+    <div class="container" style="margin-top: 100px;">
+      <div id="loading" class="loading">Memuat artikel...</div>
+      <div id="error-message" class="error-message"></div>
+      
+      <div class="back-button">
+        <button class="btn btn-secondary" onclick="goBack()">Kembali</button>
+      </div>
+
       <div class="row">
         <div class="col-md-9 post-content" data-aos="fade-up">
           <div class="single-post">
-            <figure class="my-4">
-              <img id="gambarartikel" src="../../assets/img/bgpkk.jpeg" alt="Article Image" class="img-fluid">
-            </figure>
             <div class="post-meta">
-              <span id="article-author"></span>
+              <figure class="my-4">
+                <img src="../../assets/img/bgpkk.jpeg" alt="" class="img-fluid">
+              </figure>
               <span class="mx-1">&bullet;</span>
               <span id="article-date"></span>
             </div>
             <h2 class="mb-5" id="article-title"></h2>
+            <h4 class="mb-4" id="article-subtitle"></h4>
             <div id="article-content"></div>
           </div>
         </div>
@@ -104,81 +124,19 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer id="footer" class="footer">
-
-    <div class="footer-content">
-        <div class="container">
-            <div class="row g-5">
-                <!-- Left Section with Text and Image -->
-                <div class="col-lg-4 text-center text-lg-start">
-                    <h3 class="footer-heading">PKK Desa Sidomulyo</h3>
-                    <img src="../../assets/img/icon.png" alt="Logo PKK" class="img-fluid mt-2" style="max-width: 100px;">
-                </div>
-
-                <!-- Middle Section with Profil -->
-                <div class="col-6 col-lg-2">
-                    <h3 class="footer-heading">Profil</h3>
-                    <ul class="footer-links list-unstyled">
-                        <li><a href=""><i class="bi bi-chevron-right"></i> Visi & Misi</a></li>
-                    </ul>
-                </div>
-
-                <!-- Middle Section with Quick Links -->
-                <div class="col-6 col-lg-2">
-                    <h3 class="footer-heading">Quick Link</h3>
-                    <ul class="footer-links list-unstyled">
-                        <li><a href=""><i class="bi bi-chevron-right"></i> Galeri</a></li>
-                        <li><a href=""><i class="bi bi-chevron-right"></i> Artikel</a></li>
-                    </ul>
-                </div>
-
-                <!-- Right Section with Contact Info -->
-                <div class="col-6 col-lg-4">
-                    <h3 class="footer-heading">Hubungi Kami</h3>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-geo-alt"></i>Sidomulyo Kec. Jabung Kabupaten Malang,Jawa Timur</li>
-                        <li><i class="bi bi-envelope"></i> </li>
-                        <li><i class="bi bi-telephone"></i>+62 822-3232-5053</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-legal" style="padding: 8px 0;">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-3 mb-md-0">
-                    <div class="copyright" style="padding: 5px;">
-                        © Copyright <strong><span>PKK Desa Sidomulyo</span></strong>. All Rights Reserved
-                    </div>
-                    <div class="credits" style="padding: 4px;">
-                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</footer>
-
-  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
   <!-- Vendor JS Files -->
   <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="../../assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="../../assets/vendor/aos/aos.js"></script>
-  <script src="../../assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
   <script src="../../assets/js/main.js"></script>
 
-  <!-- Firebase JS SDK -->
   <script type="module">
+    // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-    import { getFirestore, collection, getDocs,doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js';
 
     // Firebase configuration
@@ -192,71 +150,80 @@
       measurementId: "G-0T78MDY5ED",
     };
 
-    let currentUser = null;
-  
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    onAuthStateChanged(auth, async (user) => {
-      const loadingElement = document.getElementById('loading');
-      const errorElement = document.getElementById('error-message');
-      
-      if (user) {
-        currentUser = user;
-        document.getElementById('userEmail').textContent = user.email;
-        loadingElement.style.display = 'block';
-        try {
-          await tampilkanArtikel(db);
-          loadingElement.style.display = 'none';
-        } catch (error) {
-          console.error("Error in tampilkanArtikel:", error);
-          loadingElement.style.display = 'none';
-          errorElement.style.display = 'block';
-          errorElement.textContent = 'Gagal memuat artikel. Silakan refresh halaman.';
+    // Elements
+    const loadingElement = document.getElementById('loading');
+    const errorElement = document.getElementById('error-message');
+
+    // Get article ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
+
+    // Function to display error
+    function showError(message) {
+      errorElement.style.display = 'block';
+      errorElement.textContent = message;
+      loadingElement.style.display = 'none';
+    }
+
+    // Function to fetch and display article
+    async function fetchArticle() {
+      if (!articleId) {
+        showError('ID artikel tidak ditemukan');
+        return;
+      }
+
+      loadingElement.style.display = 'block';
+      errorElement.style.display = 'none';
+
+      try {
+        const articleRef = doc(db, "artikel", articleId);
+        const articleDoc = await getDoc(articleRef);
+
+        if (!articleDoc.exists()) {
+          showError('Artikel tidak ditemukan');
+          return;
         }
+
+        const articleData = articleDoc.data();
+
+        // Update the HTML elements
+        document.getElementById("article-date").textContent = articleData.tanggal || '-';
+        document.getElementById("article-title").textContent = articleData.judul || 'Tanpa Judul';
+        document.getElementById("article-subtitle").textContent = articleData.subjudul || '';
+        
+        // Handle content with line breaks and formatting
+        const contentElement = document.getElementById("article-content");
+        const formattedContent = articleData.content || articleData.konten || '';
+        contentElement.innerHTML = formattedContent.replace(/\n/g, "<br>");
+
+        loadingElement.style.display = 'none';
+      } catch (error) {
+        console.error("Error fetching article:", error);
+        showError('Terjadi kesalahan saat memuat artikel');
+      }
+    }
+
+    // Authentication state observer
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        document.getElementById('userEmail').textContent = user.email;
+        await fetchArticle();
       } else {
         window.location.href = '/login';
       }
     });
 
-// Function to fetch specific article by ID
-async function fetchArticle() {
-  try {
-    if (!articleId) {
-      throw new Error("No article ID provided in URL");
-    }
+    // Logout handler
 
-    // Reference the specific document in 'artikel' collection
-    const articleRef = doc(db, "artikel", articleId);
-    const articleDoc = await getDoc(articleRef);
-
-    if (articleDoc.exists()) {
-      const articleData = articleDoc.data();
-      
-      // Update the HTML elements with article data
-      document.getElementById("article-author").textContent = articleData.nama;
-      document.getElementById("article-date").textContent = articleData.tanggal;
-      document.getElementById("article-title").textContent = articleData.judul;
-
-      // Replace '\n' with '<br>' for line breaks
-      const formattedContent = articleData.content.replace(/\n/g, "<br>");
-      document.getElementById("article-content").innerHTML = formattedContent;
-    } else {
-      console.error("Article not found");
-      // Handle article not found - maybe redirect or show error message
-      document.getElementById("article-content").innerHTML = "<p>Artikel tidak ditemukan</p>";
-    }
-  } catch (error) {
-    console.error("Error fetching article:", error);
-    document.getElementById("article-content").innerHTML = "<p>Terjadi kesalahan saat memuat artikel</p>";
-  }
-}
-
-// Call the function to fetch and display the article
-fetchArticle();
-</script>
+    // Make goBack function available globally
+    window.goBack = () => {
+      window.history.back();
+    };
+  </script>
 </body>
-
 </html>
