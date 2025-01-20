@@ -6,6 +6,7 @@
     { "src": "/edit-artikel", "dest": "/frontend/admin/edit_artikel.html" },
     { "src": "/form-buat", "dest": "/frontend/admin/form_buat.html" },
     { "src": "/login", "dest": "/frontend/admin/login/login.html" },
-    { "src": "/register", "dest": "/frontend/admin/login/register.html" }
+    { "src": "/register", "dest": "/frontend/admin/login/register.html" },
+    { "src": "/preview", "dest": "/frontend/admin/artikel.html" }
   ]
 }
