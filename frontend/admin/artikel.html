@@ -51,7 +51,7 @@
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
         <a href="index.php" class="logo d-flex align-items-center">
-            <img src="assets/img/icon.png" alt="Logo" style="width: 50px; height: auto; margin-right: 10px;">
+            <img src="../../assets/img/iconfix.png" alt="Logo" style="width: 50px; height: auto; margin-right: 10px;">
             <h1>PKK Desa Sidomulyo</h1>
         </a>
 
@@ -124,6 +124,64 @@
     </div>
   </section>
 
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Left Section with Text and Image -->
+                <div class="col-lg-4 text-center text-lg-start">
+                    <h3 class="footer-heading">PKK Desa Sidomulyo</h3>
+                    <img src="../../assets/img/iconfix.png" alt="Logo PKK" class="img-fluid mt-2" style="max-width: 100px;">
+                </div>
+
+                <!-- Middle Section with Profil -->
+                <div class="col-6 col-lg-2">
+                    <h3 class="footer-heading">Profil</h3>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href=""><i class="bi bi-chevron-right"></i> Visi & Misi</a></li>
+                    </ul>
+                </div>
+
+                <!-- Middle Section with Quick Links -->
+                <div class="col-6 col-lg-2">
+                    <h3 class="footer-heading">Quick Link</h3>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href=""><i class="bi bi-chevron-right"></i> Galeri</a></li>
+                        <li><a href=""><i class="bi bi-chevron-right"></i> Artikel</a></li>
+                    </ul>
+                </div>
+
+                <!-- Right Section with Contact Info -->
+                <div class="col-6 col-lg-4">
+                    <h3 class="footer-heading">Hubungi Kami</h3>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt"></i>Sidomulyo Kec. Jabung Kabupaten Malang,Jawa Timur</li>
+                        <li><i class="bi bi-envelope"></i> </li>
+                        <li><i class="bi bi-telephone"></i>+62 822-3232-5053</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-legal" style="padding: 8px 0;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-3 mb-md-0">
+                    <div class="copyright" style="padding: 5px;">
+                        © Copyright <strong><span>PKK Desa Sidomulyo</span></strong>. All Rights Reserved
+                    </div>
+                    <div class="credits" style="padding: 4px;">
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</footer>
+
   <!-- Vendor JS Files -->
   <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
@@ -137,7 +195,6 @@
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js';
 
     // Firebase configuration
     const firebaseConfig = {
@@ -153,7 +210,6 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const auth = getAuth(app);
 
     // Elements
     const loadingElement = document.getElementById('loading');
@@ -208,15 +264,6 @@
       }
     }
 
-    // Authentication state observer
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        document.getElementById('userEmail').textContent = user.email;
-        await fetchArticle();
-      } else {
-        window.location.href = '/login';
-      }
-    });
 
     // Logout handler
 
