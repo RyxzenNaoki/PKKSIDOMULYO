@@ -193,84 +193,107 @@
 
   <script type="module">
     // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+    // Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
-      authDomain: "pkkdesasidomulyo.firebaseapp.com",
-      projectId: "pkkdesasidomulyo",
-      storageBucket: "pkkdesasidomulyo.firebasestorage.com",
-      messagingSenderId: "647872499017",
-      appId: "1:647872499017:web:6a12f09da5018a0c769e98",
-      measurementId: "G-0T78MDY5ED",
-    };
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
+  authDomain: "pkkdesasidomulyo.firebaseapp.com",
+  projectId: "pkkdesasidomulyo",
+  storageBucket: "pkkdesasidomulyo.firebasestorage.com",
+  messagingSenderId: "647872499017",
+  appId: "1:647872499017:web:6a12f09da5018a0c769e98",
+  measurementId: "G-0T78MDY5ED",
+};
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-    // Elements
-    const loadingElement = document.getElementById('loading');
-    const errorElement = document.getElementById('error-message');
+// Elements
+const loadingElement = document.getElementById('loading');
+const errorElement = document.getElementById('error-message');
+const dateElement = document.getElementById('article-date');
+const titleElement = document.getElementById('article-title');
+const subtitleElement = document.getElementById('article-subtitle');
+const contentElement = document.getElementById('article-content');
 
-    // Get article ID from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const articleId = urlParams.get('id');
+// Function to display error
+function showError(message) {
+  if (errorElement) {
+    errorElement.style.display = 'block';
+    errorElement.textContent = message;
+  }
+  if (loadingElement) {
+    loadingElement.style.display = 'none';
+  }
+}
 
-    // Function to display error
-    function showError(message) {
-      errorElement.style.display = 'block';
-      errorElement.textContent = message;
+// Function to safely update element content
+function updateElement(element, content) {
+  if (element) {
+    element.textContent = content;
+  }
+}
+
+// Function to fetch and display article
+async function fetchArticle() {
+  // Get article ID from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const articleId = urlParams.get('id');
+
+  if (!articleId) {
+    showError('ID artikel tidak ditemukan');
+    return;
+  }
+
+  if (loadingElement) {
+    loadingElement.style.display = 'block';
+  }
+  if (errorElement) {
+    errorElement.style.display = 'none';
+  }
+
+  try {
+    const articleRef = doc(db, "artikel", articleId);
+    const articleDoc = await getDoc(articleRef);
+
+    if (!articleDoc.exists()) {
+      showError('Artikel tidak ditemukan');
+      return;
+    }
+
+    const articleData = articleDoc.data();
+
+    // Update the HTML elements safely
+    updateElement(dateElement, articleData.tanggal || '-');
+    updateElement(titleElement, articleData.judul || 'Tanpa Judul');
+    updateElement(subtitleElement, articleData.subjudul || '');
+    
+    // Handle content with line breaks and formatting
+    if (contentElement) {
+      const formattedContent = articleData.content || articleData.konten || '';
+      contentElement.innerHTML = formattedContent.replace(/\n/g, "<br>");
+    }
+
+    if (loadingElement) {
       loadingElement.style.display = 'none';
     }
+  } catch (error) {
+    console.error("Error fetching article:", error);
+    showError('Terjadi kesalahan saat memuat artikel');
+  }
+}
 
-    // Function to fetch and display article
-    async function fetchArticle() {
-      if (!articleId) {
-        showError('ID artikel tidak ditemukan');
-        return;
-      }
+// Make goBack function available globally
+window.goBack = () => {
+  window.history.back();
+};
 
-      loadingElement.style.display = 'block';
-      errorElement.style.display = 'none';
-
-      try {
-        const articleRef = doc(db, "artikel", articleId);
-        const articleDoc = await getDoc(articleRef);
-
-        if (!articleDoc.exists()) {
-          showError('Artikel tidak ditemukan');
-          return;
-        }
-
-        const articleData = articleDoc.data();
-
-        // Update the HTML elements
-        document.getElementById("article-date").textContent = articleData.tanggal || '-';
-        document.getElementById("article-title").textContent = articleData.judul || 'Tanpa Judul';
-        document.getElementById("article-subtitle").textContent = articleData.subjudul || '';
-        
-        // Handle content with line breaks and formatting
-        const contentElement = document.getElementById("article-content");
-        const formattedContent = articleData.content || articleData.konten || '';
-        contentElement.innerHTML = formattedContent.replace(/\n/g, "<br>");
-
-        loadingElement.style.display = 'none';
-      } catch (error) {
-        console.error("Error fetching article:", error);
-        showError('Terjadi kesalahan saat memuat artikel');
-      }
-    }
-
-
-    // Logout handler
-
-    // Make goBack function available globally
-    window.goBack = () => {
-      window.history.back();
-    };
+// Call fetchArticle when the document is loaded
+document.addEventListener('DOMContentLoaded', fetchArticle);
   </script>
 </body>
 </html>
