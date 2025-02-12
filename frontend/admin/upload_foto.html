@@ -225,7 +225,7 @@
       formData.append('title', imageTitle || file.name);
 
       try {
-        const response = await fetch('https://adminpkksidomulyo.vercel.app/upload', {
+        const response = await fetch('/upload', {
           method: 'POST',
           body: formData
         });
