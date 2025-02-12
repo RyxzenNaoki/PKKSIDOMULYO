@@ -55,6 +55,11 @@
     #uploadHistory {
       margin-top: 2rem;
     }
+    .file-info {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
   </style>
 </head>
 <body>
@@ -82,6 +87,7 @@
             <label for="fileInput" class="custom-file-label">
               <i class="bi bi-cloud-upload"></i> Pilih Foto
             </label>
+            <div id="fileInfo" class="file-info"></div>
           </div>
 
           <img id="previewImage" class="preview-image" alt="Preview">
@@ -186,12 +192,14 @@
         document.querySelector('.custom-file-label').textContent = file.name;
         
         // Display file information
-        document.getElementById('fileInfo').textContent = 
-          `Type: ${file.type} | Size: ${(file.size / 1024).toFixed(2)} KB`;
+        const fileInfo = document.getElementById('fileInfo');
+        if (fileInfo) {
+          fileInfo.textContent = `Type: ${file.type} | Size: ${(file.size / 1024).toFixed(2)} KB`;
+        }
       }
     });
 
-    // Updated upload function
+    // Updated upload function with proper error handling
     window.uploadFile = async () => {
       if (!currentUser) {
         alert('Silakan login terlebih dahulu!');
@@ -225,13 +233,13 @@
       formData.append('title', imageTitle || file.name);
 
       try {
-        const response = await fetch('/upload', {
+        const response = await fetch('/upload', {  // Changed to /api/upload
           method: 'POST',
           body: formData
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Upload gagal: ${response.statusText}`);
         }
 
         const data = await response.json();
@@ -260,12 +268,12 @@
           // Reload upload history
           loadUploadHistory();
         } else {
-          throw new Error(data.error);
+          throw new Error(data.error || 'Upload gagal');
         }
       } catch (error) {
         document.getElementById('message').innerHTML = `
           <div class="alert alert-danger">
-            Upload gagal: ${error.message}
+            ${error.message}
           </div>
         `;
       } finally {
@@ -278,7 +286,10 @@
       document.getElementById('fileInput').value = '';
       document.getElementById('imageTitle').value = '';
       document.getElementById('previewImage').style.display = 'none';
-      document.getElementById('fileInfo').textContent = '';
+      const fileInfo = document.getElementById('fileInfo');
+      if (fileInfo) {
+        fileInfo.textContent = '';
+      }
       document.querySelector('.custom-file-label').textContent = 'Pilih Foto';
     }
 
