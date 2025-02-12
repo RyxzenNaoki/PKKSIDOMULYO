@@ -4,6 +4,8 @@ const cors = require('cors');
 const { google } = require('googleapis');
 const { Storage } = require('@google-cloud/storage');
 const serviceAccount = require('./service-account.json');
+const fs = require('fs');
+
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -27,6 +29,10 @@ const drive = google.drive({
   })
 });
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
 app.post('/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
@@ -35,7 +41,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   try {
     const fileMetadata = {
       name: req.file.originalname,
-      parents: ['PKKSIDOMULYO']
+      parents: ['1KLvxbkOjW40YQzxpFRmVcalqfeXmuQUc']
     };
 
     const media = {
@@ -48,6 +54,10 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       media: media,
       fields: 'id'
     });
+
+    fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Gagal menghapus file lokal:', err);
+      });
 
     res.send({ success: true, fileId: response.data.id, fileUrl: `https://drive.google.com/file/d/${response.data.id}/view` });
   } catch (error) {
