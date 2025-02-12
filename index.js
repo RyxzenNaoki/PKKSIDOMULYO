@@ -13,6 +13,8 @@ admin.initializeApp({
     credential: admin.credential.cert(require(serviceAccount)),
 });
 
+const GOOGLE_APPLICATION_CREDENTIALS = require('./service-account.json');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -47,7 +49,7 @@ app.post("/upload", verifyToken, upload.single("file"), async (req, res) => {
     try {
         const fileMetadata = {
             name: req.file.originalname,
-            parents: [process.env.FOLDER_ID], // Opsional: simpan ke folder tertentu
+            parents: [PKKSIDOMULYO], // Opsional: simpan ke folder tertentu
         };
 
         const media = {
@@ -67,8 +69,4 @@ app.post("/upload", verifyToken, upload.single("file"), async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
-
-app.listen(process.env.PORT, () => {
-    console.log(`Server berjalan di http://localhost:${process.env.PORT}`);
 });
