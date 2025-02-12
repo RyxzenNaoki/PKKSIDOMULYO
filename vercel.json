@@ -9,9 +9,7 @@
     { "src": "/register", "dest": "/frontend/admin/login/register.html" },
     { "src": "/preview", "dest": "/frontend/admin/artikel.html" },
     { "src": "/upload-foto", "dest": "/frontend/admin/upload_foto.html" },
-    { "src": "/upload", "dest": "/index.js" }
-  ],
-  "headers": [
+    { "src": "/upload", "dest": "/index.js" },
     {
       "source": "/(.*)",
       "headers": [
