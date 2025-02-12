@@ -6,9 +6,11 @@ const { google } = require("googleapis");
 const admin = require("firebase-admin");
 require("dotenv").config();
 
+const path = require('path');
+const serviceAccount = require(path.join('F:', 'Microsoft Visual Studio', 'pkkdesasidomulyo-firebase-adminsdk-fbsvc-92f7108cef.json'));
 // Inisialisasi Firebase Admin SDK
 admin.initializeApp({
-    credential: admin.credential.cert(require("./service-account.json")),
+    credential: admin.credential.cert(require(serviceAccount)),
 });
 
 const app = express();
