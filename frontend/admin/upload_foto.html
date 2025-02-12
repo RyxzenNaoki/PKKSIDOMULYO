@@ -214,15 +214,10 @@
       formData.append('title', imageTitle || fileInput.name);
 
       try {
-        const token = await currentUser.getIdToken();
-        
         const response = await fetch('https://adminpkksidomulyo.vercel.app/upload', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+  method: 'POST',
+  body: formData
+});
 
         console.log('Response received:', response); // Debug log
 
