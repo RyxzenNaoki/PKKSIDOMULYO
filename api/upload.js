@@ -1,6 +1,6 @@
 const { google } = require('googleapis');
 const multer = require('multer');
-const initMiddleware = require('./init-middleware.js');
+const initMiddleware = require('../init-middleware.js');
 
 // Configure multer for memory storage
 const multerStorage = multer.memoryStorage();

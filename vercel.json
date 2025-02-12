@@ -2,6 +2,11 @@
   "version": 2,
   "routes": [
     {
+      "src": "/api/upload",
+      "methods": ["POST", "OPTIONS"],
+      "dest": "/api/upload.js"
+    },
+    {
       "src": "/",
       "dest": "/frontend/admin/login/login.html"
     },
@@ -32,17 +37,6 @@
     {
       "src": "/upload-foto",
       "dest": "/frontend/admin/upload_foto.html"
-    },
-    {
-      "src": "/upload",
-      "methods": ["POST", "OPTIONS"],
-      "dest": "/index.js",
-      "headers": {
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-        "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
-      }
     }
   ]
 }
