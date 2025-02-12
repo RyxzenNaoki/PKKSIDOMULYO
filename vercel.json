@@ -11,7 +11,7 @@
     { "src": "/upload-foto", "dest": "/frontend/admin/upload_foto.html" },
     { "src": "/upload", "dest": "/index.js" },
     {
-      "source": "/(.*)",
+      "src": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "*" },
