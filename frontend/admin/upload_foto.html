@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Upload Foto - PKK Desa Sidomulyo</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS Files -->
+  <link href="../../assets/css/variables.css" rel="stylesheet">
+  <link href="../../assets/css/main.css" rel="stylesheet">
+
+  <style>
+    .upload-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .preview-image {
+      max-width: 100%;
+      max-height: 300px;
+      margin: 1rem 0;
+      display: none;
+    }
+    .upload-progress {
+      display: none;
+      margin: 1rem 0;
+    }
+    .file-input-wrapper {
+      position: relative;
+      margin: 1rem 0;
+    }
+    .custom-file-input {
+      display: none;
+    }
+    .custom-file-label {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #uploadHistory {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+      <a href="/dashboard" class="logo d-flex align-items-center">
+        <h1>PKK Desa Sidomulyo</h1>
+      </a>
+      <div class="position-relative d-flex align-items-center">
+        <span id="userEmail" class="me-3"></span>
+        <button class="btn btn-outline-primary" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="upload-container">
+          <h2 class="text-center mb-4">Upload Foto</h2>
+          
+          <div class="file-input-wrapper">
+            <input type="file" id="fileInput" class="custom-file-input" accept="image/*">
+            <label for="fileInput" class="custom-file-label">
+              <i class="bi bi-cloud-upload"></i> Pilih Foto
+            </label>
+          </div>
+
+          <img id="previewImage" class="preview-image" alt="Preview">
+          
+          <div class="form-group">
+            <input type="text" class="form-control" id="imageTitle" placeholder="Judul Foto (opsional)">
+          </div>
+
+          <div class="progress upload-progress" id="uploadProgress">
+            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+          </div>
+
+          <button onclick="uploadFile()" class="btn btn-primary w-100 mt-3" id="uploadButton">
+            <i class="bi bi-cloud-upload"></i> Upload ke Google Drive
+          </button>
+
+          <p id="message" class="text-center mt-3"></p>
+
+          <div id="uploadHistory">
+            <h4>Riwayat Upload</h4>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Judul</th>
+                    <th>Tanggal</th>
+                    <th>Link</th>
+                  </tr>
+                </thead>
+                <tbody id="historyList">
+                  <!-- History will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Vendor JS Files -->
+  <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/vendor/aos/aos.js"></script>
+  
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
+      authDomain: "pkkdesasidomulyo.firebaseapp.com",
+      projectId: "pkkdesasidomulyo",
+      storageBucket: "pkkdesasidomulyo.firebasestorage.com",
+      messagingSenderId: "647872499017",
+      appId: "1:647872499017:web:6a12f09da5018a0c769e98",
+      measurementId: "G-0T78MDY5ED"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    // Auth state observer
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('userEmail').textContent = user.email;
+        loadUploadHistory();
+      } else {
+        window.location.href = '/login';
+      }
+    });
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = '/login';
+      } catch (error) {
+        console.error('Error signing out:', error);
+        alert('Gagal logout. Silakan coba lagi.');
+      }
+    });
+
+    // File input preview
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('previewImage');
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+        document.querySelector('.custom-file-label').textContent = file.name;
+      }
+    });
+
+    // Upload function
+    window.uploadFile = async () => {
+      if (!currentUser) {
+        alert('Silakan login terlebih dahulu!');
+        return;
+      }
+
+      const fileInput = document.getElementById('fileInput').files[0];
+      const imageTitle = document.getElementById('imageTitle').value.trim();
+      const uploadButton = document.getElementById('uploadButton');
+      const progressBar = document.getElementById('uploadProgress');
+      const progressBarInner = progressBar.querySelector('.progress-bar');
+
+      if (!fileInput) {
+        alert('Pilih file terlebih dahulu!');
+        return;
+      }
+
+      // Show progress bar and disable upload button
+      progressBar.style.display = 'block';
+      uploadButton.disabled = true;
+
+      const formData = new FormData();
+      formData.append('file', fileInput);
+      formData.append('title', imageTitle || fileInput.name);
+
+      try {
+        const token = await currentUser.getIdToken();
+        
+        const response = await fetch('http://localhost:3000/upload', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Save upload record to Firestore
+          await addDoc(collection(db, 'uploads'), {
+            userId: currentUser.uid,
+            title: imageTitle || fileInput.name,
+            fileId: data.fileId,
+            fileUrl: data.fileUrl,
+            timestamp: new Date().toISOString(),
+            type: 'image'
+          });
+
+          document.getElementById('message').innerHTML = `
+            <div class="alert alert-success">
+              File berhasil diupload! <a href="${data.fileUrl}" target="_blank">Lihat foto</a>
+            </div>
+          `;
+          
+          // Reset form
+          document.getElementById('fileInput').value = '';
+          document.getElementById('imageTitle').value = '';
+          document.getElementById('previewImage').style.display = 'none';
+          document.querySelector('.custom-file-label').textContent = 'Pilih Foto';
+          
+          // Reload upload history
+          loadUploadHistory();
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        document.getElementById('message').innerHTML = `
+          <div class="alert alert-danger">
+            Upload gagal: ${error.message}
+          </div>
+        `;
+      } finally {
+        progressBar.style.display = 'none';
+        uploadButton.disabled = false;
+      }
+    };
+
+    // Load upload history
+    async function loadUploadHistory() {
+      if (!currentUser) return;
+
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = '';
+
+      try {
+        const uploadsRef = collection(db, 'uploads');
+        const q = query(
+          uploadsRef,
+          where('userId', '==', currentUser.uid),
+          where('type', '==', 'image'),
+          orderBy('timestamp', 'desc')
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          historyList.innerHTML = `
+            <tr>
+              <td colspan="3" class="text-center">Belum ada foto yang diupload</td>
+            </tr>
+          `;
+          return;
+        }
+
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${data.title}</td>
+            <td>${new Date(data.timestamp).toLocaleDateString('id-ID')}</td>
+            <td>
+              <a href="${data.fileUrl}" target="_blank" class="btn btn-sm btn-info">
+                <i class="bi bi-eye"></i> Lihat
+              </a>
+            </td>
+          `;
+          historyList.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error loading upload history:', error);
+        historyList.innerHTML = `
+          <tr>
+            <td colspan="3" class="text-center text-danger">
+              Gagal memuat riwayat upload
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // Initialize AOS
+    AOS.init();
+  </script>
+</body>
+</html>

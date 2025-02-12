@@ -7,6 +7,8 @@
     { "src": "/form-buat", "dest": "/frontend/admin/form_buat.html" },
     { "src": "/login", "dest": "/frontend/admin/login/login.html" },
     { "src": "/register", "dest": "/frontend/admin/login/register.html" },
-    { "src": "/preview", "dest": "/frontend/admin/artikel.html" }
+    { "src": "/preview", "dest": "/frontend/admin/artikel.html" },
+    { "src": "/upload-foto", "dest": "/frontend/admin/upload_foto.html" }
+    
   ]
 }
