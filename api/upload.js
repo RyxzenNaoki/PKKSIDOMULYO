@@ -1,6 +1,6 @@
-const { google } = require('googleapis');
-const multer = require('multer');
-const initMiddleware = require('../init-middleware.js');
+import { google } from 'googleapis';
+import multer from 'multer';
+import initMiddleware from '../init-middleware.js';
 
 // Configure multer for memory storage
 const multerStorage = multer.memoryStorage();
@@ -17,18 +17,13 @@ const multerMiddleware = initMiddleware(
 );
 
 // Google Drive API configuration
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
-
 const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URI
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  process.env.REDIRECT_URI
 );
 
-oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+oauth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
 const drive = google.drive({
   version: 'v3',
@@ -42,8 +37,14 @@ export const config = {
 };
 
 export default async function handler(req, res) {
+  console.log('Received upload request');
+
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
     res.status(200).end();
     return;
   }
@@ -56,16 +57,21 @@ export default async function handler(req, res) {
 
   try {
     // Process the file upload
+    console.log('Processing file upload');
     await multerMiddleware(req, res);
 
     if (!req.file) {
+      console.log('No file uploaded');
       return res.status(400).json({ success: false, error: 'No file uploaded' });
     }
+
+    console.log('File received:', req.file.originalname);
 
     const { originalname, buffer, mimetype } = req.file;
     const title = req.body.title || originalname;
 
     // Upload to Google Drive
+    console.log('Uploading to Google Drive');
     const response = await drive.files.create({
       requestBody: {
         name: title,
@@ -77,6 +83,8 @@ export default async function handler(req, res) {
       },
     });
 
+    console.log('File uploaded to Drive, setting permissions');
+
     // Set file permissions to public
     await drive.permissions.create({
       fileId: response.data.id,
@@ -86,11 +94,15 @@ export default async function handler(req, res) {
       },
     });
 
+    console.log('Getting file data');
+
     // Get the public URL
     const fileData = await drive.files.get({
       fileId: response.data.id,
       fields: 'webViewLink, webContentLink',
     });
+
+    console.log('Upload successful');
 
     res.status(200).json({
       success: true,
@@ -103,7 +115,7 @@ export default async function handler(req, res) {
     console.error('Upload error:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to upload file'
+      error: error.message || 'Failed to upload file'
     });
   }
 }
