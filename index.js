@@ -1,75 +1,61 @@
-const express = require("express");
-const fs = require("fs");
-const multer = require("multer");
-const cors = require("cors");
-const { google } = require("googleapis");
-const admin = require("firebase-admin");
-require("dotenv").config();
-
-const path = require('path');
-const serviceAccount = require(path.join('F:', 'Microsoft Visual Studio', 'pkkdesasidomulyo-firebase-adminsdk-fbsvc-92f7108cef.json'));
-// Inisialisasi Firebase Admin SDK
-admin.initializeApp({
-    credential: admin.credential.cert(require(serviceAccount)),
-});
-
-const GOOGLE_APPLICATION_CREDENTIALS = require('./service-account.json');
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
+const { google } = require('googleapis');
+const { Storage } = require('@google-cloud/storage');
+const serviceAccount = require('./service-account.json');
 
 const app = express();
-app.use(cors(
-    origin = '*', // sesuaikan dengan origin dari frontend
-    optionsSuccessStatus = 200
-));
-app.use(express.json());
+const upload = multer({ dest: 'uploads/' });
 
-// Konfigurasi Multer untuk menerima file
-const upload = multer({ dest: "uploads/" });
+app.use(cors({
+  origin: '*',
+  methods: ['POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Inisialisasi Google Drive API
-const auth = new google.auth.GoogleAuth({
-    keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-    scopes: ["https://www.googleapis.com/auth/drive.file"],
+const storage = new Storage({
+  credentials: serviceAccount
 });
 
-const drive = google.drive({ version: "v3", auth });
+const drive = google.drive({
+  version: 'v3',
+  auth: new google.auth.JWT({
+    email: serviceAccount.client_email,
+    key: serviceAccount.private_key,
+    scopes: ['https://www.googleapis.com/auth/drive.file']
+  })
+});
 
-// Middleware untuk verifikasi Firebase Token
-async function verifyToken(req, res, next) {
-    try {
-        const token = req.headers.authorization?.split("Bearer ")[1];
-        if (!token) return res.status(401).json({ error: "Token tidak ditemukan" });
+app.post('/upload', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
 
-        const decodedToken = await admin.auth().verifyIdToken(token);
-        req.user = decodedToken;
-        next();
-    } catch (error) {
-        res.status(403).json({ error: "Token tidak valid" });
-    }
-}
+  try {
+    const fileMetadata = {
+      name: req.file.originalname,
+      parents: ['PKKSIDOMULYO']
+    };
 
-// Upload file ke Google Drive
-app.post("/upload", verifyToken, upload.single("file"), async (req, res) => {
-    try {
-        const fileMetadata = {
-            name: req.file.originalname,
-            parents: [PKKSIDOMULYO], // Opsional: simpan ke folder tertentu
-        };
+    const media = {
+      mimeType: req.file.mimetype,
+      body: fs.createReadStream(req.file.path)
+    };
 
-        const media = {
-            mimeType: req.file.mimetype,
-            body: fs.createReadStream(req.file.path),
-        };
+    const response = await drive.files.create({
+      resource: fileMetadata,
+      media: media,
+      fields: 'id'
+    });
 
-        const file = await drive.files.create({
-            resource: fileMetadata,
-            media: media,
-            fields: "id",
-        });
+    res.send({ success: true, fileId: response.data.id, fileUrl: `https://drive.google.com/file/d/${response.data.id}/view` });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).send('Error uploading file.');
+  }
+});
 
-        fs.unlinkSync(req.file.path); // Hapus file lokal setelah upload
-
-        res.json({ success: true, fileId: file.data.id });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
