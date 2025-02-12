@@ -16,7 +16,10 @@ admin.initializeApp({
 const GOOGLE_APPLICATION_CREDENTIALS = require('./service-account.json');
 
 const app = express();
-app.use(cors());
+app.use(cors(
+    origin = '*', // sesuaikan dengan origin dari frontend
+    optionsSuccessStatus = 200
+));
 app.use(express.json());
 
 // Konfigurasi Multer untuk menerima file

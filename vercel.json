@@ -9,7 +9,13 @@
     { "src": "/register", "dest": "/frontend/admin/login/register.html" },
     { "src": "/preview", "dest": "/frontend/admin/artikel.html" },
     { "src": "/upload-foto", "dest": "/frontend/admin/upload_foto.html" },
-    { "src": "/upload", "dest": "/index.js" }
+    { "src": "/upload", "dest": "/index.js", 
+        "methods": ["POST", "OPTIONS"],
+          "headers": {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST,OPTIONS"
+          } 
+        }
     
   ]
 }
