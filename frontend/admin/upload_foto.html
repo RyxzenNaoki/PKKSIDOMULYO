@@ -184,24 +184,35 @@
         }
         reader.readAsDataURL(file);
         document.querySelector('.custom-file-label').textContent = file.name;
+        
+        // Display file information
+        document.getElementById('fileInfo').textContent = 
+          `Type: ${file.type} | Size: ${(file.size / 1024).toFixed(2)} KB`;
       }
     });
 
-    // Upload function
+    // Updated upload function
     window.uploadFile = async () => {
       if (!currentUser) {
         alert('Silakan login terlebih dahulu!');
         return;
       }
 
-      const fileInput = document.getElementById('fileInput').files[0];
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
       const imageTitle = document.getElementById('imageTitle').value.trim();
       const uploadButton = document.getElementById('uploadButton');
       const progressBar = document.getElementById('uploadProgress');
       const progressBarInner = progressBar.querySelector('.progress-bar');
 
-      if (!fileInput) {
+      if (!file) {
         alert('Pilih file terlebih dahulu!');
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Hanya file gambar yang diperbolehkan!');
         return;
       }
 
@@ -210,20 +221,18 @@
       uploadButton.disabled = true;
 
       const formData = new FormData();
-      formData.append('file', fileInput);
-      formData.append('title', imageTitle || fileInput.name);
+      formData.append('file', file);
+      formData.append('title', imageTitle || file.name);
 
       try {
         const response = await fetch('https://adminpkksidomulyo.vercel.app/upload', {
-  method: 'POST',
-  body: formData
-});
+          method: 'POST',
+          body: formData
+        });
 
-        console.log('Response received:', response); // Debug log
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
 
@@ -231,11 +240,12 @@
           // Save upload record to Firestore
           await addDoc(collection(db, 'uploads'), {
             userId: currentUser.uid,
-            title: imageTitle || fileInput.name,
+            title: imageTitle || file.name,
             fileId: data.fileId,
             fileUrl: data.fileUrl,
             timestamp: new Date().toISOString(),
-            type: 'image'
+            type: 'image',
+            mimeType: file.type
           });
 
           document.getElementById('message').innerHTML = `
@@ -245,10 +255,7 @@
           `;
           
           // Reset form
-          document.getElementById('fileInput').value = '';
-          document.getElementById('imageTitle').value = '';
-          document.getElementById('previewImage').style.display = 'none';
-          document.querySelector('.custom-file-label').textContent = 'Pilih Foto';
+          resetForm();
           
           // Reload upload history
           loadUploadHistory();
@@ -266,6 +273,14 @@
         uploadButton.disabled = false;
       }
     };
+
+    function resetForm() {
+      document.getElementById('fileInput').value = '';
+      document.getElementById('imageTitle').value = '';
+      document.getElementById('previewImage').style.display = 'none';
+      document.getElementById('fileInfo').textContent = '';
+      document.querySelector('.custom-file-label').textContent = 'Pilih Foto';
+    }
 
     // Load upload history
     async function loadUploadHistory() {
