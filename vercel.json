@@ -35,6 +35,7 @@
     },
     {
       "src": "/upload",
+      "methods": ["POST", "OPTIONS"],
       "dest": "/index.js",
       "headers": {
         "Access-Control-Allow-Credentials": "true",
