@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import multer from 'multer';
 import initMiddleware from '../init-middleware.js';
+import { Readable } from 'stream';
 
 // Configure multer for memory storage
 const multerStorage = multer.memoryStorage();
@@ -70,6 +71,11 @@ export default async function handler(req, res) {
     const { originalname, buffer, mimetype } = req.file;
     const title = req.body.title || originalname;
 
+    // Create a readable stream from the buffer
+    const stream = new Readable();
+    stream.push(buffer);
+    stream.push(null);
+
     // Upload to Google Drive
     console.log('Uploading to Google Drive');
     const response = await drive.files.create({
@@ -79,7 +85,7 @@ export default async function handler(req, res) {
       },
       media: {
         mimeType: mimetype,
-        body: Buffer.from(buffer),
+        body: stream,
       },
     });
 
