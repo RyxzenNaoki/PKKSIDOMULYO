@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Data Dasa Wisma</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link href="../../assets/img/iconfix.png" rel="icon">
+  <link href="../../assets/img/iconfix.png" rel="apple-touch-icon">
+
+  <!-- Vendor CSS Files -->
+  <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS Files -->
+  <link href="../../assets/css/variables.css" rel="stylesheet">
+  <link href="../../assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+      <a class="logo d-flex align-items-center">
+        <h1>PKK Desa Sidomulyo</h1>
+      </a>
+      <div class="position-relative d-flex align-items-center" id="header-right">
+        <span id="userEmail" class="me-3"></span>
+        <button class="btn btn-outline-primary" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="container mt-5 pt-4">
+      <h2>Form Data Dasa Wisma</h2>
+      <div class="card">
+        <div class="card-body">
+          <form id="dasawismaForm">
+            <!-- Informasi Dasar -->
+            <div class="mb-3">
+              <label for="namaDasawisma" class="form-label">Nama Dasa Wisma:</label>
+              <input type="text" class="form-control" id="namaDasawisma" required>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="jumlahKRT" class="form-label">Jumlah KRT:</label>
+                <input type="number" class="form-control" id="jumlahKRT" min="0" required>
+              </div>
+              <div class="col-md-6">
+                <label for="jumlahKK" class="form-label">Jumlah KK:</label>
+                <input type="number" class="form-control" id="jumlahKK" min="0" required>
+              </div>
+            </div>
+
+            <!-- Jumlah Anggota Keluarga -->
+            <h5 class="mt-4">Jumlah Anggota Keluarga</h5>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Total:</label>
+                <div class="input-group">
+                  <span class="input-group-text">L</span>
+                  <input type="number" class="form-control" id="totalL" min="0" required>
+                  <span class="input-group-text">P</span>
+                  <input type="number" class="form-control" id="totalP" min="0" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Balita:</label>
+                <div class="input-group">
+                  <span class="input-group-text">L</span>
+                  <input type="number" class="form-control" id="balitaL" min="0" required>
+                  <span class="input-group-text">P</span>
+                  <input type="number" class="form-control" id="balitaP" min="0" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="pus" class="form-label">PUS:</label>
+                <input type="number" class="form-control" id="pus" min="0" required>
+              </div>
+              <div class="col-md-4">
+                <label for="wus" class="form-label">WUS:</label>
+                <input type="number" class="form-control" id="wus" min="0" required>
+              </div>
+              <div class="col-md-4">
+                <label for="ibuHamil" class="form-label">Ibu Hamil:</label>
+                <input type="number" class="form-control" id="ibuHamil" min="0" required>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="ibuMenyusui" class="form-label">Ibu Menyusui:</label>
+                <input type="number" class="form-control" id="ibuMenyusui" min="0" required>
+              </div>
+              <div class="col-md-4">
+                <label for="lansia" class="form-label">Lansia:</label>
+                <input type="number" class="form-control" id="lansia" min="0" required>
+              </div>
+              <div class="col-md-4">
+                <label for="buta" class="form-label">Buta:</label>
+                <input type="number" class="form-control" id="buta" min="0" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="berkebutuhanKhusus" class="form-label">Berkebutuhan Khusus:</label>
+              <input type="number" class="form-control" id="berkebutuhanKhusus" min="0" required>
+            </div>
+
+            <!-- Jumlah Rumah -->
+            <h5 class="mt-4">Jumlah Rumah</h5>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="rumahSehat" class="form-label">Sehat:</label>
+                <input type="number" class="form-control" id="rumahSehat" min="0" required>
+              </div>
+              <div class="col-md-6">
+                <label for="rumahTidakSehat" class="form-label">Tidak Sehat:</label>
+                <input type="number" class="form-control" id="rumahTidakSehat" min="0" required>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="memilikiTempatSampah" class="form-label">Memiliki Tempat Pembuangan Sampah:</label>
+                <input type="number" class="form-control" id="memilikiTempatSampah" min="0" required>
+              </div>
+              <div class="col-md-6">
+                <label for="memilikiSPAL" class="form-label">Memiliki SPAL:</label>
+                <input type="number" class="form-control" id="memilikiSPAL" min="0" required>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="memilikiJamban" class="form-label">Memiliki Jamban Keluarga:</label>
+                <input type="number" class="form-control" id="memilikiJamban" min="0" required>
+              </div>
+              <div class="col-md-6">
+                <label for="memilikiStikerP4K" class="form-label">Menempel Stiker P4K:</label>
+                <input type="number" class="form-control" id="memilikiStikerP4K" min="0" required>
+              </div>
+            </div>
+
+            <!-- Sumber Air -->
+            <h5 class="mt-4">Sumber Air Keluarga</h5>
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="sumurAir" class="form-label">Sumur:</label>
+                <input type="number" class="form-control" id="sumurAir" min="0" required>
+              </div>
+              <div class="col-md-4">
+                <label for="pdamAir" class="form-label">PDAM:</label>
+                <input type="number" class="form-control" id="pdamAir" min="0" required>
+              </div>
+              <div class="col-md-4">
+                <label for="lainnyaAir" class="form-label">Lainnya:</label>
+                <input type="number" class="form-control" id="lainnyaAir" min="0" required>
+              </div>
+            </div>
+
+            <!-- Makanan Pokok -->
+            <h5 class="mt-4">Makanan Pokok</h5>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="makananBeras" class="form-label">Beras:</label>
+                <input type="number" class="form-control" id="makananBeras" min="0" required>
+              </div>
+              <div class="col-md-6">
+                <label for="makananNonBeras" class="form-label">Non Beras:</label>
+                <input type="number" class="form-control" id="makananNonBeras" min="0" required>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary">Simpan Data</button>
+              <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+            </div>
+          </form>
+          <div id="status" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Vendor JS Files -->
+  <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../../assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../../assets/js/main.js"></script>
+
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
+      authDomain: "pkkdesasidomulyo.firebaseapp.com",
+      projectId: "pkkdesasidomulyo",
+      storageBucket: "pkkdesasidomulyo.firebasestorage.com",
+      messagingSenderId: "647872499017",
+      appId: "1:647872499017:web:6a12f09da5018a0c769e98",
+      measurementId: "G-0T78MDY5ED",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentUser = null;
+
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('userEmail').textContent = user.email;
+      } else {
+        window.location.href = '/login';
+      }
+    });
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = '/login';
+      } catch (error) {
+        console.error('Error signing out:', error);
+        alert('Gagal logout. Silakan coba lagi.');
+      }
+    });
+
+    // Form handler
+    const dasawismaForm = document.getElementById('dasawismaForm');
+    const statusDiv = document.getElementById('status');
+
+    // Helper function to get form value or '-' if empty
+    const getFormValue = (id) => {
+      const value = document.getElementById(id).value.trim();
+      return value === '' ? '-' : value;
+    };
+
+    dasawismaForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!currentUser) {
+        statusDiv.innerHTML = '<div class="alert alert-danger">Anda harus login untuk menyimpan data</div>';
+        return;
+      }
+
+      const submitButton = dasawismaForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      statusDiv.innerHTML = '<div class="alert alert-info">Menyimpan data...</div>';
+
+      try {
+        const data = {
+          namaDasawisma: getFormValue('namaDasawisma'),
+          jumlahKRT: getFormValue('jumlahKRT'),
+          jumlahKK: getFormValue('jumlahKK'),
+          
+          // Jumlah Anggota Keluarga
+          totalL: getFormValue('totalL'),
+          totalP: getFormValue('totalP'),
+          balitaL: getFormValue('balitaL'),
+          balitaP: getFormValue('balitaP'),
+          pus: getFormValue('pus'),
+          wus: getFormValue('wus'),
+          ibuHamil: getFormValue('ibuHamil'),
+          ibuMenyusui: getFormValue('ibuMenyusui'),
+          lansia: getFormValue('lansia'),
+          buta: getFormValue('buta'),
+          berkebutuhanKhusus: getFormValue('berkebutuhanKhusus'),
+          
+          // Jumlah Rumah
+          rumahSehat: getFormValue('rumahSehat'),
+          rumahTidakSehat: getFormValue('rumahTidakSehat'),
+          memilikiTempatSampah: getFormValue('memilikiTempatSampah'),
+          memilikiSPAL: getFormValue('memilikiSPAL'),
+          memilikiJamban: getFormValue('memilikiJamban'),
+          memilikiStikerP4K: getFormValue('memilikiStikerP4K'),
+          
+          // Sumber Air
+          sumurAir: getFormValue('sumurAir'),
+          pdamAir: getFormValue('pdamAir'),
+          lainnyaAir: getFormValue('lainnyaAir'),
+          
+          // Makanan Pokok
+          makananBeras: getFormValue('makananBeras'),
+          makananNonBeras: getFormValue('makananNonBeras'),
+          
+          // Metadata
+          timestamp: serverTimestamp(),
+          authorEmail: currentUser.email,
+          createdAt: new Date().toISOString(),
+          tanggal: new Date().toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          })
+        };
+
+        // Add document to Firestore
+        await addDoc(collection(db, 'dasawisma'), data);
+
+        // Show success message
+        statusDiv.innerHTML = '<div class="alert alert-success">Data berhasil disimpan!</div>';
+        
+        // Reset form
+        dasawismaForm.reset();
+
+        // Redirect to dashboard after 2 seconds
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 2000);
+
+      } catch (error) {
+        console.error('Error saving data:', error);
+        statusDiv.innerHTML = `<div class="alert alert-danger">Gagal menyimpan data: ${error.message}</div>`;
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

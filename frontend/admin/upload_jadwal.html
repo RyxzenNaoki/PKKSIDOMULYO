@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Jadwal Posyandu</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link href="../../assets/img/iconfix.png" rel="icon">
+  <link href="../../assets/img/iconfix.png" rel="apple-touch-icon">
+
+  <!-- Vendor CSS Files -->
+  <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS Files -->
+  <link href="../../assets/css/variables.css" rel="stylesheet">
+  <link href="../../assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+      <a class="logo d-flex align-items-center">
+        <h1>PKK Desa Sidomulyo</h1>
+      </a>
+      <div class="position-relative d-flex align-items-center" id="header-right">
+        <span id="userEmail" class="me-3"></span>
+        <button class="btn btn-outline-primary" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="container mt-5 pt-4">
+      <h2>Form Jadwal Posyandu</h2>
+      <div class="card">
+        <div class="card-body">
+          <form id="posyanduForm">
+            <div class="mb-3">
+              <label for="namaPosyandu" class="form-label">Nama Posyandu:</label>
+              <select class="form-select" id="namaPosyandu" required>
+                <option value="">Pilih Posyandu</option>
+                <option value="Posyandu Tebelo">Posyandu Tebelo</option>
+                <option value="Posyandu Mangunrejo">Posyandu Mangunrejo</option>
+                <option value="Posyandu Sumberkreco">Posyandu Sumberkreco</option>
+                <option value="Posyandu Bareng">Posyandu Bareng</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="jadwalPosyandu" class="form-label">Jadwal Posyandu:</label>
+              <input type="text" class="form-control" id="jadwalPosyandu" 
+                     placeholder="Contoh: Setiap hari Senin minggu pertama, pukul 08.00 WIB" required>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary">Simpan Jadwal</button>
+              <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+            </div>
+          </form>
+          <div id="status" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Vendor JS Files -->
+  <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../../assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../../assets/js/main.js"></script>
+
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
+      authDomain: "pkkdesasidomulyo.firebaseapp.com",
+      projectId: "pkkdesasidomulyo",
+      storageBucket: "pkkdesasidomulyo.firebasestorage.com",
+      messagingSenderId: "647872499017",
+      appId: "1:647872499017:web:6a12f09da5018a0c769e98",
+      measurementId: "G-0T78MDY5ED",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentUser = null;
+
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('userEmail').textContent = user.email;
+      } else {
+        window.location.href = '/login';
+      }
+    });
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = '/login';
+      } catch (error) {
+        console.error('Error signing out:', error);
+        alert('Gagal logout. Silakan coba lagi.');
+      }
+    });
+
+    // Form handler
+    const posyanduForm = document.getElementById('posyanduForm');
+    const statusDiv = document.getElementById('status');
+
+    // Helper function to get form value or '-' if empty
+    const getFormValue = (id) => {
+      const value = document.getElementById(id).value.trim();
+      return value === '' ? '-' : value;
+    };
+
+    posyanduForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!currentUser) {
+        statusDiv.innerHTML = '<div class="alert alert-danger">Anda harus login untuk menyimpan jadwal</div>';
+        return;
+      }
+
+      const submitButton = posyanduForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      statusDiv.innerHTML = '<div class="alert alert-info">Menyimpan jadwal...</div>';
+
+      try {
+        const data = {
+          namaPosyandu: getFormValue('namaPosyandu'),
+          jadwalPosyandu: getFormValue('jadwalPosyandu'),
+          
+          // Metadata
+          timestamp: serverTimestamp(),
+          authorEmail: currentUser.email,
+          createdAt: new Date().toISOString(),
+          tanggal: new Date().toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          })
+        };
+
+        // Add document to Firestore
+        await addDoc(collection(db, 'jadwalPosyandu'), data);
+
+        // Show success message
+        statusDiv.innerHTML = '<div class="alert alert-success">Jadwal berhasil disimpan!</div>';
+        
+        // Reset form
+        posyanduForm.reset();
+
+        // Redirect to dashboard after 2 seconds
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 2000);
+
+      } catch (error) {
+        console.error('Error saving schedule:', error);
+        statusDiv.innerHTML = `<div class="alert alert-danger">Gagal menyimpan jadwal: ${error.message}</div>`;
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

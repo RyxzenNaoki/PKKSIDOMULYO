@@ -37,6 +37,14 @@
     {
       "src": "/upload-foto",
       "dest": "/frontend/admin/upload_foto.html"
+    },
+    {
+      "src": "/upload-data",
+      "dest": "/frontend/admin/upload_data.html"
+    },
+    {
+      "src": "/upload-jadwal",
+      "dest": "/frontend/admin/upload_jadwal.html"
     }
   ]
 }
