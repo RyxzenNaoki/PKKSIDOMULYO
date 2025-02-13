@@ -10,6 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
+  <!-- Favicons -->
+  <link href="../../assets/img/iconfix.png" rel="icon">
+  <link href="../../assets/img/iconfix.png" rel="apple-touch-icon">
+
   <!-- Vendor CSS Files -->
   <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -115,6 +119,7 @@
                     <th>Judul</th>
                     <th>Tanggal</th>
                     <th>Link</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="historyList">
@@ -136,8 +141,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-
+    import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+    
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
@@ -166,6 +171,51 @@
         window.location.href = '/login';
       }
     });
+
+    // Delete function
+    async function deleteUpload(docId, fileId) {
+      if (!confirm('Apakah Anda yakin ingin menghapus file ini?')) {
+        return;
+      }
+
+      try {
+        // Delete from Google Drive
+        const response = await fetch('/api/delete', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ fileId })
+        });
+
+        if (!response.ok) {
+          throw new Error('Gagal menghapus file dari Google Drive');
+        }
+
+        // Delete from Firestore
+        await deleteDoc(doc(db, 'uploads', docId));
+        
+        // Show success message
+        document.getElementById('message').innerHTML = `
+          <div class="alert alert-success">
+            File berhasil dihapus!
+          </div>
+        `;
+        
+        // Reload history
+        loadUploadHistory();
+      } catch (error) {
+        console.error('Error deleting file:', error);
+        document.getElementById('message').innerHTML = `
+          <div class="alert alert-danger">
+            Gagal menghapus file: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Make deleteUpload function available globally
+    window.deleteUpload = deleteUpload;
 
     // Logout handler
     document.getElementById('logoutBtn').addEventListener('click', async () => {
@@ -199,7 +249,7 @@
       }
     });
 
-    // Updated upload function with proper error handling
+    // Upload function
     window.uploadFile = async () => {
       if (!currentUser) {
         alert('Silakan login terlebih dahulu!');
@@ -218,13 +268,11 @@
         return;
       }
 
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         alert('Hanya file gambar yang diperbolehkan!');
         return;
       }
 
-      // Show progress bar and disable upload button
       progressBar.style.display = 'block';
       uploadButton.disabled = true;
 
@@ -233,7 +281,7 @@
       formData.append('title', imageTitle || file.name);
 
       try {
-        const response = await fetch('/api/upload', {  // Changed to /api/upload
+        const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData
         });
@@ -245,7 +293,6 @@
         const data = await response.json();
 
         if (data.success) {
-          // Save upload record to Firestore
           await addDoc(collection(db, 'uploads'), {
             userId: currentUser.uid,
             title: imageTitle || file.name,
@@ -262,10 +309,7 @@
             </div>
           `;
           
-          // Reset form
           resetForm();
-          
-          // Reload upload history
           loadUploadHistory();
         } else {
           throw new Error(data.error || 'Upload gagal');
@@ -298,7 +342,15 @@
       if (!currentUser) return;
 
       const historyList = document.getElementById('historyList');
-      historyList.innerHTML = '';
+      historyList.innerHTML = `
+        <tr>
+          <td colspan="4" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+        </tr>
+      `;
 
       try {
         const uploadsRef = collection(db, 'uploads');
@@ -314,12 +366,13 @@
         if (querySnapshot.empty) {
           historyList.innerHTML = `
             <tr>
-              <td colspan="3" class="text-center">Belum ada foto yang diupload</td>
+              <td colspan="4" class="text-center">Belum ada foto yang diupload</td>
             </tr>
           `;
           return;
         }
 
+        historyList.innerHTML = '';
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           const row = document.createElement('tr');
@@ -331,6 +384,11 @@
                 <i class="bi bi-eye"></i> Lihat
               </a>
             </td>
+            <td>
+              <button onclick="deleteUpload('${doc.id}', '${data.fileId}')" class="btn btn-sm btn-danger">
+                <i class="bi bi-trash"></i> Hapus
+              </button>
+            </td>
           `;
           historyList.appendChild(row);
         });
@@ -338,8 +396,8 @@
         console.error('Error loading upload history:', error);
         historyList.innerHTML = `
           <tr>
-            <td colspan="3" class="text-center text-danger">
-              Gagal memuat riwayat upload
+            <td colspan="4" class="text-center text-danger">
+              Gagal memuat riwayat upload: ${error.message}
             </td>
           </tr>
         `;
