@@ -31,6 +31,9 @@ const drive = google.drive({
   auth: oauth2Client,
 });
 
+// Folder ID dari Google Drive
+const FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
+
 export const config = {
   api: {
     bodyParser: false,
@@ -76,12 +79,13 @@ export default async function handler(req, res) {
     stream.push(buffer);
     stream.push(null);
 
-    // Upload to Google Drive
-    console.log('Uploading to Google Drive');
+    // Upload to Google Drive with folder specification
+    console.log('Uploading to Google Drive folder');
     const response = await drive.files.create({
       requestBody: {
         name: title,
         mimeType: mimetype,
+        parents: [FOLDER_ID], // Specify the folder ID here
       },
       media: {
         mimeType: mimetype,
