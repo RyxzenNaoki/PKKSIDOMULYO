@@ -396,9 +396,6 @@
               <thead class="table-dark">
                 <tr>
                   <th>Nama Dasa Wisma</th>
-                  <th>Jumlah KRT</th>
-                  <th>Jumlah KK</th>
-                  <th>Total L/P</th>
                   <th>Tanggal</th>
                   <th>Aksi</th>
                 </tr>
@@ -425,6 +422,7 @@
               <div class="modal-body">
                 <form id="editForm">
                   <input type="hidden" id="editId" />
+                  <!-- Informasi Dasar -->
                   <div class="mb-3">
                     <label for="editNamaDasawisma" class="form-label"
                       >Nama Dasa Wisma:</label
@@ -436,32 +434,327 @@
                       required
                     />
                   </div>
+
                   <div class="row mb-3">
                     <div class="col-md-6">
-                      <label for="editJumlahKRT" class="form-label">Jumlah KRT:</label>
-                      <input type="number" class="form-control" id="editJumlahKRT" min="0" required>
+                      <label for="editJumlahKRT" class="form-label"
+                        >Jumlah KRT:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editJumlahKRT"
+                        min="0"
+                        required
+                      />
                     </div>
                     <div class="col-md-6">
-                      <label for="editJumlahKK" class="form-label">Jumlah KK:</label>
-                      <input type="number" class="form-control" id="editJumlahKK" min="0" required>
+                      <label for="editJumlahKK" class="form-label"
+                        >Jumlah KK:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editJumlahKK"
+                        min="0"
+                        required
+                      />
                     </div>
                   </div>
+
+                  <!-- Jumlah Anggota Keluarga -->
+                  <h5 class="mt-4">Jumlah Anggota Keluarga</h5>
                   <div class="row mb-3">
                     <div class="col-md-6">
-                      <label class="form-label">Total L:</label>
-                      <input type="number" class="form-control" id="editTotalL" min="0" required>
+                      <label class="form-label">Total:</label>
+                      <div class="input-group">
+                        <span class="input-group-text">L</span>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="editTotalL"
+                          min="0"
+                          required
+                        />
+                        <span class="input-group-text">P</span>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="editTotalP"
+                          min="0"
+                          required
+                        />
+                      </div>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label">Total P:</label>
-                      <input type="number" class="form-control" id="editTotalP" min="0" required>
+                      <label class="form-label">Balita:</label>
+                      <div class="input-group">
+                        <span class="input-group-text">L</span>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="editBalitaL"
+                          min="0"
+                          required
+                        />
+                        <span class="input-group-text">P</span>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="editBalitaP"
+                          min="0"
+                          required
+                        />
+                      </div>
                     </div>
                   </div>
-                  <!-- Add more edit fields if needed -->
+
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="editPus" class="form-label">PUS:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editPus"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="editWus" class="form-label">WUS:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editWus"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="editIbuHamil" class="form-label"
+                        >Ibu Hamil:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editIbuHamil"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="editIbuMenyusui" class="form-label"
+                        >Ibu Menyusui:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editIbuMenyusui"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="editLansia" class="form-label">Lansia:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editLansia"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="editButa" class="form-label">Buta:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editButa"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="editBerkebutuhanKhusus" class="form-label"
+                      >Berkebutuhan Khusus:</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="editBerkebutuhanKhusus"
+                      min="0"
+                      required
+                    />
+                  </div>
+
+                  <!-- Jumlah Rumah -->
+                  <h5 class="mt-4">Jumlah Rumah</h5>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="editRumahSehat" class="form-label"
+                        >Sehat:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editRumahSehat"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="editRumahTidakSehat" class="form-label"
+                        >Tidak Sehat:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editRumahTidakSehat"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="editMemilikiTempatSampah" class="form-label"
+                        >Memiliki Tempat Pembuangan Sampah:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editMemilikiTempatSampah"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="editMemilikiSPAL" class="form-label"
+                        >Memiliki SPAL:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editMemilikiSPAL"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="editMemilikiJamban" class="form-label"
+                        >Memiliki Jamban Keluarga:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editMemilikiJamban"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="editMemilikiStikerP4K" class="form-label"
+                        >Menempel Stiker P4K:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editMemilikiStikerP4K"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Sumber Air -->
+                  <h5 class="mt-4">Sumber Air Keluarga</h5>
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="editSumurAir" class="form-label"
+                        >Sumur:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editSumurAir"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="editPdamAir" class="form-label">PDAM:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editPdamAir"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="editLainnyaAir" class="form-label"
+                        >Lainnya:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editLainnyaAir"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Makanan Pokok -->
+                  <h5 class="mt-4">Makanan Pokok</h5>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="editMakananBeras" class="form-label"
+                        >Beras:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editMakananBeras"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="editMakananNonBeras" class="form-label"
+                        >Non Beras:</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="editMakananNonBeras"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" id="saveEdit">Simpan Perubahan</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+                <button type="button" class="btn btn-primary" id="saveEdit">
+                  Simpan Perubahan
+                </button>
               </div>
             </div>
           </div>
@@ -515,7 +808,9 @@
       let currentUser = null;
 
       // Initialize modal
-      const editModal = new bootstrap.Modal(document.getElementById("editModal"));
+      const editModal = new bootstrap.Modal(
+        document.getElementById("editModal")
+      );
 
       // Check authentication state
       onAuthStateChanged(auth, (user) => {
@@ -529,21 +824,36 @@
       });
 
       // Logout handler
-      document.getElementById("logoutBtn").addEventListener("click", async () => {
-        try {
-          await signOut(auth);
-          window.location.href = "/login";
-        } catch (error) {
-          console.error("Error signing out:", error);
-          alert("Gagal logout. Silakan coba lagi.");
-        }
-      });
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+          try {
+            await signOut(auth);
+            window.location.href = "/login";
+          } catch (error) {
+            console.error("Error signing out:", error);
+            alert("Gagal logout. Silakan coba lagi.");
+          }
+        });
 
       // Helper function to get form value
       const getFormValue = (id) => {
         const value = document.getElementById(id).value.trim();
         return value === "" ? "-" : value;
       };
+
+      // Function untuk menghapus dokumen
+      async function deleteDocument(docId) {
+        try {
+          const docRef = doc(db, "dasawisma", docId);
+          await deleteDoc(docRef);
+          await loadData(); // Refresh data setelah berhasil menghapus
+          alert("Data berhasil dihapus");
+        } catch (error) {
+          console.error("Error deleting document:", error);
+          alert("Gagal menghapus data: " + error.message);
+        }
+      }
 
       // Function to load and display data
       async function loadData() {
@@ -552,80 +862,135 @@
 
         try {
           const querySnapshot = await getDocs(collection(db, "dasawisma"));
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
+          querySnapshot.forEach((document) => {
+            const data = document.data();
             const row = document.createElement("tr");
             row.innerHTML = `
-              <td>${data.namaDasawisma}</td>
-              <td>${data.jumlahKRT}</td>
-              <td>${data.jumlahKK}</td>
-              <td>${data.totalL}/${data.totalP}</td>
-              <td>${data.tanggal}</td>
-              <td>
-                <button class="btn btn-sm btn-primary edit-btn" data-id="${doc.id}">
-                  <i class="bi bi-pencil"></i> Edit
-                </button>
-                <button class="btn btn-sm btn-danger delete-btn" data-id="${doc.id}">
-                  <i class="bi bi-trash"></i> Hapus
-                </button>
-              </td>
-            `;
-
-            // Add edit button handler
-            row.querySelector(".edit-btn").addEventListener("click", () => {
-              document.getElementById("editId").value = doc.id;
-              document.getElementById("editNamaDasawisma").value = data.namaDasawisma;
-              document.getElementById("editJumlahKRT").value = data.jumlahKRT;
-              document.getElementById("editJumlahKK").value = data.jumlahKK;
-              document.getElementById("editTotalL").value = data.totalL;
-              document.getElementById("editTotalP").value = data.totalP;
-              editModal.show();
-            });
+        <td>${data.namaDasawisma}</td>
+        <td>${data.tanggal}</td>
+        <td>
+          <button class="btn btn-sm btn-primary edit-btn" data-id="${document.id}">
+            <i class="bi bi-pencil"></i> Edit
+          </button>
+          <button class="btn btn-sm btn-danger delete-btn" data-id="${document.id}">
+            <i class="bi bi-trash"></i> Hapus
+          </button>
+        </td>
+      `;
 
             // Add delete button handler
-            row.querySelector(".delete-btn").addEventListener("click", async () => {
-              if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-                try {
-                  await deleteDoc(doc(db, "dasawisma", doc.id));
-                  loadData();
-                  alert("Data berhasil dihapus");
-                } catch (error) {
-                  console.error("Error deleting document:", error);
-                  alert("Gagal menghapus data");
+            row
+              .querySelector(".delete-btn")
+              .addEventListener("click", async () => {
+                if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                  await deleteDocument(document.id);
                 }
-              }
+              });
+
+            // Edit button handler tetap sama
+            row.querySelector(".edit-btn").addEventListener("click", () => {
+              populateEditForm(document.id, data);
+              editModal.show();
             });
 
             tableBody.appendChild(row);
           });
         } catch (error) {
           console.error("Error loading data:", error);
-          alert("Gagal memuat data");
+          alert("Gagal memuat data: " + error.message);
         }
       }
 
+      // Helper function untuk mengisi form edit
+      function populateEditForm(docId, data) {
+        document.getElementById("editId").value = docId;
+        document.getElementById("editNamaDasawisma").value = data.namaDasawisma;
+        document.getElementById("editJumlahKRT").value = data.jumlahKRT;
+        document.getElementById("editJumlahKK").value = data.jumlahKK;
+        document.getElementById("editTotalL").value = data.totalL;
+        document.getElementById("editTotalP").value = data.totalP;
+        document.getElementById("editBalitaL").value = data.balitaL;
+        document.getElementById("editBalitaP").value = data.balitaP;
+        document.getElementById("editPus").value = data.pus;
+        document.getElementById("editWus").value = data.wus;
+        document.getElementById("editIbuHamil").value = data.ibuHamil;
+        document.getElementById("editIbuMenyusui").value = data.ibuMenyusui;
+        document.getElementById("editLansia").value = data.lansia;
+        document.getElementById("editButa").value = data.buta;
+        document.getElementById("editBerkebutuhanKhusus").value =
+          data.berkebutuhanKhusus;
+        document.getElementById("editRumahSehat").value = data.rumahSehat;
+        document.getElementById("editRumahTidakSehat").value =
+          data.rumahTidakSehat;
+        document.getElementById("editMemilikiTempatSampah").value =
+          data.memilikiTempatSampah;
+        document.getElementById("editMemilikiSPAL").value = data.memilikiSPAL;
+        document.getElementById("editMemilikiJamban").value =
+          data.memilikiJamban;
+        document.getElementById("editMemilikiStikerP4K").value =
+          data.memilikiStikerP4K;
+        document.getElementById("editSumurAir").value = data.sumurAir;
+        document.getElementById("editPdamAir").value = data.pdamAir;
+        document.getElementById("editLainnyaAir").value = data.lainnyaAir;
+        document.getElementById("editMakananBeras").value = data.makananBeras;
+        document.getElementById("editMakananNonBeras").value =
+          data.makananNonBeras;
+      }
+
       // Handle save edit
-      document.getElementById("saveEdit").addEventListener("click", async () => {
-        const docId = document.getElementById("editId").value;
-        const docRef = doc(db, "dasawisma", docId);
+      document
+        .getElementById("saveEdit")
+        .addEventListener("click", async () => {
+          const docId = document.getElementById("editId").value;
+          const docRef = doc(db, "dasawisma", docId);
 
-        try {
-          await updateDoc(docRef, {
-            namaDasawisma: document.getElementById("editNamaDasawisma").value,
-            jumlahKRT: document.getElementById("editJumlahKRT").value,
-            jumlahKK: document.getElementById("editJumlahKK").value,
-            totalL: document.getElementById("editTotalL").value,
-            totalP: document.getElementById("editTotalP").value,
-          });
+          try {
+            await updateDoc(docRef, {
+              namaDasawisma: document.getElementById("editNamaDasawisma").value,
+              jumlahKRT: document.getElementById("editJumlahKRT").value,
+              jumlahKK: document.getElementById("editJumlahKK").value,
+              totalL: document.getElementById("editTotalL").value,
+              totalP: document.getElementById("editTotalP").value,
+              balitaL: document.getElementById("editBalitaL").value,
+              balitaP: document.getElementById("editBalitaP").value,
+              pus: document.getElementById("editPus").value,
+              wus: document.getElementById("editWus").value,
+              ibuHamil: document.getElementById("editIbuHamil").value,
+              ibuMenyusui: document.getElementById("editIbuMenyusui").value,
+              lansia: document.getElementById("editLansia").value,
+              buta: document.getElementById("editButa").value,
+              berkebutuhanKhusus: document.getElementById(
+                "editBerkebutuhanKhusus"
+              ).value,
+              rumahSehat: document.getElementById("editRumahSehat").value,
+              rumahTidakSehat: document.getElementById("editRumahTidakSehat")
+                .value,
+              memilikiTempatSampah: document.getElementById(
+                "editMemilikiTempatSampah"
+              ).value,
+              memilikiSPAL: document.getElementById("editMemilikiSPAL").value,
+              memilikiJamban:
+                document.getElementById("editMemilikiJamban").value,
+              memilikiStikerP4K: document.getElementById(
+                "editMemilikiStikerP4K"
+              ).value,
+              sumurAir: document.getElementById("editSumurAir").value,
+              pdamAir: document.getElementById("editPdamAir").value,
+              lainnyaAir: document.getElementById("editLainnyaAir").value,
+              makananBeras: document.getElementById("editMakananBeras").value,
+              makananNonBeras: document.getElementById("editMakananNonBeras")
+                .value,
+              updatedAt: new Date().toISOString(),
+            });
 
-          editModal.hide();
-          loadData();
-          alert("Data berhasil diperbarui");
-        } catch (error) {
-          console.error("Error updating document:", error);
-          alert("Gagal memperbarui data");
-        }
-      });
+            editModal.hide();
+            loadData();
+            alert("Data berhasil diperbarui");
+          } catch (error) {
+            console.error("Error updating document:", error);
+            alert("Gagal memperbarui data");
+          }
+        });
 
       // Form submit handler
       const dasawismaForm = document.getElementById("dasawismaForm");
@@ -635,13 +1000,17 @@
         e.preventDefault();
 
         if (!currentUser) {
-          statusDiv.innerHTML = '<div class="alert alert-danger">Anda harus login untuk menyimpan data</div>';
+          statusDiv.innerHTML =
+            '<div class="alert alert-danger">Anda harus login untuk menyimpan data</div>';
           return;
         }
 
-        const submitButton = dasawismaForm.querySelector('button[type="submit"]');
+        const submitButton = dasawismaForm.querySelector(
+          'button[type="submit"]'
+        );
         submitButton.disabled = true;
-        statusDiv.innerHTML = '<div class="alert alert-info">Menyimpan data...</div>';
+        statusDiv.innerHTML =
+          '<div class="alert alert-info">Menyimpan data...</div>';
 
         try {
           const data = {
@@ -681,7 +1050,8 @@
           };
 
           await addDoc(collection(db, "dasawisma"), data);
-          statusDiv.innerHTML = '<div class="alert alert-success">Data berhasil disimpan!</div>';
+          statusDiv.innerHTML =
+            '<div class="alert alert-success">Data berhasil disimpan!</div>';
           dasawismaForm.reset();
           loadData();
 
