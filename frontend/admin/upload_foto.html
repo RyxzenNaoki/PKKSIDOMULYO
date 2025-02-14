@@ -1,349 +1,457 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Upload Foto - PKK Desa Sidomulyo</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Upload Foto - PKK Desa Sidomulyo</title>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Favicons -->
-  <link href="../../assets/img/iconfix.png" rel="icon">
-  <link href="../../assets/img/iconfix.png" rel="apple-touch-icon">
+    <!-- Favicons -->
+    <link href="../../assets/img/iconfix.png" rel="icon" />
+    <link href="../../assets/img/iconfix.png" rel="apple-touch-icon" />
 
-  <!-- Vendor CSS Files -->
-  <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../../assets/vendor/aos/aos.css" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link
+      href="../../assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="../../assets/vendor/aos/aos.css" rel="stylesheet" />
 
-  <!-- Template Main CSS Files -->
-  <link href="../../assets/css/variables.css" rel="stylesheet">
-  <link href="../../assets/css/main.css" rel="stylesheet">
+    <!-- Template Main CSS Files -->
+    <link href="../../assets/css/variables.css" rel="stylesheet" />
+    <link href="../../assets/css/main.css" rel="stylesheet" />
 
-  <style>
-    .upload-container {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .preview-image {
-      max-width: 100%;
-      max-height: 300px;
-      margin: 1rem 0;
-      display: none;
-    }
-    .upload-progress {
-      display: none;
-      margin: 1rem 0;
-    }
-    .file-input-wrapper {
-      position: relative;
-      margin: 1rem 0;
-    }
-    .custom-file-input {
-      display: none;
-    }
-    .custom-file-label {
-      display: inline-block;
-      padding: 8px 16px;
-      background-color: #e9ecef;
-      border: 1px solid #ced4da;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #uploadHistory {
-      margin-top: 2rem;
-    }
-    .file-info {
-      margin-top: 0.5rem;
-      font-size: 0.875rem;
-      color: #6c757d;
-    }
-  </style>
-</head>
-<body>
-  <!-- Header -->
-  <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-      <a href="/dashboard" class="logo d-flex align-items-center">
-        <h1>PKK Desa Sidomulyo</h1>
-      </a>
-      <div class="position-relative d-flex align-items-center">
-        <span id="userEmail" class="me-3"></span>
-        <button class="btn btn-outline-primary" id="logoutBtn">Logout</button>
-      </div>
-    </div>
-  </header>
-
-  <main id="main">
-    <section class="section">
-      <div class="container">
-        <div class="upload-container">
-          <h2 class="text-center mb-4">Upload Foto</h2>
-          
-          <div class="file-input-wrapper">
-            <input type="file" id="fileInput" class="custom-file-input" accept="image/*">
-            <label for="fileInput" class="custom-file-label">
-              <i class="bi bi-cloud-upload"></i> Pilih Foto
-            </label>
-            <div id="fileInfo" class="file-info"></div>
-          </div>
-
-          <img id="previewImage" class="preview-image" alt="Preview">
-          
-          <div class="form-group">
-            <input type="text" class="form-control" id="imageTitle" placeholder="Judul Foto (opsional)">
-          </div>
-
-          <div class="progress upload-progress" id="uploadProgress">
-            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-          </div>
-
-          <button onclick="uploadFile()" class="btn btn-primary w-100 mt-3" id="uploadButton">
-            <i class="bi bi-cloud-upload"></i> Upload ke Google Drive
-          </button>
-
-          <p id="message" class="text-center mt-3"></p>
-
-          <div id="uploadHistory">
-            <h4>Riwayat Upload</h4>
-            <div class="table-responsive">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Judul</th>
-                    <th>Tanggal</th>
-                    <th>Link</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="historyList">
-                  <!-- History will be populated here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+    <style>
+      .upload-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .preview-image {
+        max-width: 100%;
+        max-height: 300px;
+        margin: 1rem 0;
+        display: none;
+      }
+      .upload-progress {
+        display: none;
+        margin: 1rem 0;
+      }
+      .file-input-wrapper {
+        position: relative;
+        margin: 1rem 0;
+      }
+      .custom-file-input {
+        display: none;
+      }
+      .custom-file-label {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      #uploadHistory {
+        margin-top: 2rem;
+      }
+      .file-info {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: #6c757d;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header id="header" class="header d-flex align-items-center fixed-top">
+      <div
+        class="container-fluid container-xl d-flex align-items-center justify-content-between"
+      >
+        <a href="/dashboard" class="logo d-flex align-items-center">
+          <h1>PKK Desa Sidomulyo</h1>
+        </a>
+        <div class="position-relative d-flex align-items-center">
+          <span id="userEmail" class="me-3"></span>
+          <button class="btn btn-outline-primary" id="logoutBtn">Logout</button>
         </div>
       </div>
-    </section>
-  </main>
+    </header>
 
-  <!-- Vendor JS Files -->
-  <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/vendor/aos/aos.js"></script>
-  
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-    
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
-      authDomain: "pkkdesasidomulyo.firebaseapp.com",
-      projectId: "pkkdesasidomulyo",
-      storageBucket: "pkkdesasidomulyo.firebasestorage.com",
-      messagingSenderId: "647872499017",
-      appId: "1:647872499017:web:6a12f09da5018a0c769e98",
-      measurementId: "G-0T78MDY5ED"
-    };
+    <main id="main">
+      <section class="section">
+        <div class="container">
+          <div class="upload-container">
+            <h2 class="text-center mb-4">Upload Foto</h2>
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+            <div class="file-input-wrapper">
+              <input
+                type="file"
+                id="fileInput"
+                class="custom-file-input"
+                accept="image/*"
+              />
+              <label for="fileInput" class="custom-file-label">
+                <i class="bi bi-cloud-upload"></i> Pilih Foto
+              </label>
+              <div id="fileInfo" class="file-info"></div>
+            </div>
 
-    let currentUser = null;
+            <img id="previewImage" class="preview-image" alt="Preview" />
 
-    // Auth state observer
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        currentUser = user;
-        document.getElementById('userEmail').textContent = user.email;
-        loadUploadHistory();
-      } else {
-        window.location.href = '/login';
-      }
-    });
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                id="imageTitle"
+                placeholder="Judul Foto (opsional)"
+              />
+            </div>
 
-    // Delete function
-    async function deleteUpload(docId, fileId) {
-      if (!confirm('Apakah Anda yakin ingin menghapus file ini?')) {
-        return;
-      }
+            <div class="progress upload-progress" id="uploadProgress">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                style="width: 0%"
+              ></div>
+            </div>
 
-      try {
-        // Delete from Google Drive
-        const response = await fetch('/api/delete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ fileId })
-        });
+            <button
+              onclick="uploadFile()"
+              class="btn btn-primary w-100 mt-3"
+              id="uploadButton"
+            >
+              <i class="bi bi-cloud-upload"></i> Upload ke Google Drive
+            </button>
 
-        if (!response.ok) {
-          throw new Error('Gagal menghapus file dari Google Drive');
+            <p id="message" class="text-center mt-3"></p>
+
+            <div id="uploadHistory">
+              <h4>Riwayat Upload</h4>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Judul</th>
+                      <th>Tanggal</th>
+                      <th>Link</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historyList">
+                    <!-- History will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <a href="/dashboard" class="btn btn-secondary"
+              >Kembali ke Dashboard</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Vendor JS Files -->
+    <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/vendor/aos/aos.js"></script>
+
+    <!-- Firebase -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        query,
+        where,
+        getDocs,
+        orderBy,
+        deleteDoc,
+        doc,
+      } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAOluooURyiYp6R-4BWdLwZNs9f3VZreaY",
+        authDomain: "pkkdesasidomulyo.firebaseapp.com",
+        projectId: "pkkdesasidomulyo",
+        storageBucket: "pkkdesasidomulyo.firebasestorage.com",
+        messagingSenderId: "647872499017",
+        appId: "1:647872499017:web:6a12f09da5018a0c769e98",
+        measurementId: "G-0T78MDY5ED",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      let currentUser = null;
+
+      const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+      // Auth state observer
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          currentUser = user;
+          document.getElementById("userEmail").textContent = user.email;
+          loadUploadHistory();
+        } else {
+          window.location.href = "/login";
+        }
+      });
+
+      // Delete function
+      async function deleteUpload(docId, fileId) {
+        if (!confirm("Apakah Anda yakin ingin menghapus file ini?")) {
+          return;
         }
 
-        // Delete from Firestore
-        await deleteDoc(doc(db, 'uploads', docId));
-        
-        // Show success message
-        document.getElementById('message').innerHTML = `
+        try {
+          // Delete from Google Drive
+          const response = await fetch("/api/delete", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ fileId }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Gagal menghapus file dari Google Drive");
+          }
+
+          // Delete from Firestore
+          await deleteDoc(doc(db, "uploads", docId));
+
+          // Show success message
+          document.getElementById("message").innerHTML = `
           <div class="alert alert-success">
             File berhasil dihapus!
           </div>
         `;
-        
-        // Reload history
-        loadUploadHistory();
-      } catch (error) {
-        console.error('Error deleting file:', error);
-        document.getElementById('message').innerHTML = `
+
+          // Reload history
+          loadUploadHistory();
+        } catch (error) {
+          console.error("Error deleting file:", error);
+          document.getElementById("message").innerHTML = `
           <div class="alert alert-danger">
             Gagal menghapus file: ${error.message}
           </div>
         `;
-      }
-    }
-
-    // Make deleteUpload function available globally
-    window.deleteUpload = deleteUpload;
-
-    // Logout handler
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      try {
-        await signOut(auth);
-        window.location.href = '/login';
-      } catch (error) {
-        console.error('Error signing out:', error);
-        alert('Gagal logout. Silakan coba lagi.');
-      }
-    });
-
-    // File input preview
-    document.getElementById('fileInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const preview = document.getElementById('previewImage');
-          preview.src = e.target.result;
-          preview.style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-        document.querySelector('.custom-file-label').textContent = file.name;
-        
-        // Display file information
-        const fileInfo = document.getElementById('fileInfo');
-        if (fileInfo) {
-          fileInfo.textContent = `Type: ${file.type} | Size: ${(file.size / 1024).toFixed(2)} KB`;
         }
       }
-    });
 
-    // Upload function
-    window.uploadFile = async () => {
-      if (!currentUser) {
-        alert('Silakan login terlebih dahulu!');
-        return;
-      }
+      // Make deleteUpload function available globally
+      window.deleteUpload = deleteUpload;
 
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-      const imageTitle = document.getElementById('imageTitle').value.trim();
-      const uploadButton = document.getElementById('uploadButton');
-      const progressBar = document.getElementById('uploadProgress');
-      const progressBarInner = progressBar.querySelector('.progress-bar');
-
-      if (!file) {
-        alert('Pilih file terlebih dahulu!');
-        return;
-      }
-
-      if (!file.type.startsWith('image/')) {
-        alert('Hanya file gambar yang diperbolehkan!');
-        return;
-      }
-
-      progressBar.style.display = 'block';
-      uploadButton.disabled = true;
-
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('title', imageTitle || file.name);
-
-      try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData
+      // Logout handler
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+          try {
+            await signOut(auth);
+            window.location.href = "/login";
+          } catch (error) {
+            console.error("Error signing out:", error);
+            alert("Gagal logout. Silakan coba lagi.");
+          }
         });
 
-        if (!response.ok) {
-          throw new Error(`Upload gagal: ${response.statusText}`);
+      // File input handler with size validation
+      document
+        .getElementById("fileInput")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          const messageElement = document.getElementById("message");
+          const preview = document.getElementById("previewImage");
+          const fileInfo = document.getElementById("fileInfo");
+          const uploadButton = document.getElementById("uploadButton");
+
+          // Reset previous messages
+          messageElement.innerHTML = "";
+
+          if (file) {
+            // Check file size
+            if (file.size > MAX_FILE_SIZE) {
+              // Clear the file input
+              this.value = "";
+              // Hide preview
+              preview.style.display = "none";
+              // Show error message
+              messageElement.innerHTML = `
+        <div class="alert alert-danger">
+          File terlalu besar! Maksimal ukuran file adalah 10 MB. 
+          File Anda berukuran ${(file.size / (1024 * 1024)).toFixed(2)} MB.
+        </div>
+      `;
+              // Reset file label
+              document.querySelector(".custom-file-label").textContent =
+                "Pilih Foto";
+              // Disable upload button
+              uploadButton.disabled = true;
+              return;
+            }
+
+            // File size is ok, proceed with preview
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              preview.src = e.target.result;
+              preview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+
+            // Update file label and info
+            document.querySelector(".custom-file-label").textContent =
+              file.name;
+            fileInfo.textContent = `Type: ${file.type} | Size: ${(
+              file.size / 1024
+            ).toFixed(2)} KB`;
+            // Enable upload button
+            uploadButton.disabled = false;
+          }
+        });
+
+      // Modified upload function with size validation
+      window.uploadFile = async () => {
+        if (!currentUser) {
+          alert("Silakan login terlebih dahulu!");
+          return;
         }
 
-        const data = await response.json();
+        const fileInput = document.getElementById("fileInput");
+        const file = fileInput.files[0];
+        const imageTitle = document.getElementById("imageTitle").value.trim();
+        const uploadButton = document.getElementById("uploadButton");
+        const progressBar = document.getElementById("uploadProgress");
+        const progressBarInner = progressBar.querySelector(".progress-bar");
+        const messageElement = document.getElementById("message");
 
-        if (data.success) {
-          await addDoc(collection(db, 'uploads'), {
-            userId: currentUser.uid,
-            title: imageTitle || file.name,
-            fileId: data.fileId,
-            fileUrl: `https://drive.google.com/thumbnail?id=${data.fileId}&sz=w1000`,
-            timestamp: new Date().toISOString(),
-            type: 'image',
-            mimeType: file.type
+        // Reset previous messages
+        messageElement.innerHTML = "";
+
+        // Validation checks
+        if (!file) {
+          messageElement.innerHTML = `
+      <div class="alert alert-warning">
+        Silakan pilih file terlebih dahulu!
+      </div>
+    `;
+          return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+          messageElement.innerHTML = `
+      <div class="alert alert-danger">
+        Hanya file gambar yang diperbolehkan!
+      </div>
+    `;
+          return;
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+          messageElement.innerHTML = `
+      <div class="alert alert-danger">
+        File terlalu besar! Maksimal ukuran file adalah 10 MB. 
+        File Anda berukuran ${(file.size / (1024 * 1024)).toFixed(2)} MB.
+      </div>
+    `;
+          return;
+        }
+
+        // Proceed with upload
+        progressBar.style.display = "block";
+        uploadButton.disabled = true;
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("title", imageTitle || file.name);
+
+        try {
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
           });
 
-          document.getElementById('message').innerHTML = `
-            <div class="alert alert-success">
-              File berhasil diupload! <a href="${data.fileUrl}" target="_blank">Lihat foto</a>
-            </div>
-          `;
-          
-          resetForm();
-          loadUploadHistory();
-        } else {
-          throw new Error(data.error || 'Upload gagal');
+          if (!response.ok) {
+            throw new Error(`Upload gagal: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+
+          if (data.success) {
+            // Store in Firestore with thumbnail URL
+            await addDoc(collection(db, "uploads"), {
+              userId: currentUser.uid,
+              title: imageTitle || file.name,
+              fileId: data.fileId,
+              fileUrl: `https://drive.google.com/thumbnail?id=${data.fileId}&sz=w1000`,
+              timestamp: new Date().toISOString(),
+              type: "image",
+              mimeType: file.type,
+              size: file.size,
+            });
+
+            messageElement.innerHTML = `
+        <div class="alert alert-success">
+          File berhasil diupload! <a href="${data.fileUrl}" target="_blank">Lihat foto</a>
+        </div>
+      `;
+
+            resetForm();
+            loadUploadHistory();
+          } else {
+            throw new Error(data.error || "Upload gagal");
+          }
+        } catch (error) {
+          messageElement.innerHTML = `
+      <div class="alert alert-danger">
+        ${error.message}
+      </div>
+    `;
+        } finally {
+          progressBar.style.display = "none";
+          uploadButton.disabled = false;
         }
-      } catch (error) {
-        document.getElementById('message').innerHTML = `
-          <div class="alert alert-danger">
-            ${error.message}
-          </div>
-        `;
-      } finally {
-        progressBar.style.display = 'none';
-        uploadButton.disabled = false;
+      };
+
+      function resetForm() {
+        document.getElementById("fileInput").value = "";
+        document.getElementById("imageTitle").value = "";
+        document.getElementById("previewImage").style.display = "none";
+        const fileInfo = document.getElementById("fileInfo");
+        if (fileInfo) {
+          fileInfo.textContent = "";
+        }
+        document.querySelector(".custom-file-label").textContent = "Pilih Foto";
       }
-    };
 
-    function resetForm() {
-      document.getElementById('fileInput').value = '';
-      document.getElementById('imageTitle').value = '';
-      document.getElementById('previewImage').style.display = 'none';
-      const fileInfo = document.getElementById('fileInfo');
-      if (fileInfo) {
-        fileInfo.textContent = '';
-      }
-      document.querySelector('.custom-file-label').textContent = 'Pilih Foto';
-    }
+      // Load upload history
+      async function loadUploadHistory() {
+        if (!currentUser) return;
 
-    // Load upload history
-    async function loadUploadHistory() {
-      if (!currentUser) return;
-
-      const historyList = document.getElementById('historyList');
-      historyList.innerHTML = `
+        const historyList = document.getElementById("historyList");
+        historyList.innerHTML = `
         <tr>
           <td colspan="4" class="text-center">
             <div class="spinner-border text-primary" role="status">
@@ -353,60 +461,64 @@
         </tr>
       `;
 
-      try {
-        const uploadsRef = collection(db, 'uploads');
-        const q = query(
-          uploadsRef,
-          where('userId', '==', currentUser.uid),
-          where('type', '==', 'image'),
-          orderBy('timestamp', 'desc')
-        );
+        try {
+          const uploadsRef = collection(db, "uploads");
+          const q = query(
+            uploadsRef,
+            where("userId", "==", currentUser.uid),
+            where("type", "==", "image"),
+            orderBy("timestamp", "desc")
+          );
 
-        const querySnapshot = await getDocs(q);
+          const querySnapshot = await getDocs(q);
 
-        if (querySnapshot.empty) {
-          historyList.innerHTML = `
+          if (querySnapshot.empty) {
+            historyList.innerHTML = `
             <tr>
               <td colspan="4" class="text-center">Belum ada foto yang diupload</td>
             </tr>
           `;
-          return;
-        }
+            return;
+          }
 
-        historyList.innerHTML = '';
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          const row = document.createElement('tr');
-          row.innerHTML = `
+          historyList.innerHTML = "";
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const row = document.createElement("tr");
+            row.innerHTML = `
             <td>${data.title}</td>
-            <td>${new Date(data.timestamp).toLocaleDateString('id-ID')}</td>
+            <td>${new Date(data.timestamp).toLocaleDateString("id-ID")}</td>
             <td>
-              <a href="${data.fileUrl}" target="_blank" class="btn btn-sm btn-info">
+              <a href="${
+                data.fileUrl
+              }" target="_blank" class="btn btn-sm btn-info">
                 <i class="bi bi-eye"></i> Lihat
               </a>
             </td>
             <td>
-              <button onclick="deleteUpload('${doc.id}', '${data.fileId}')" class="btn btn-sm btn-danger">
+              <button onclick="deleteUpload('${doc.id}', '${
+              data.fileId
+            }')" class="btn btn-sm btn-danger">
                 <i class="bi bi-trash"></i> Hapus
               </button>
             </td>
           `;
-          historyList.appendChild(row);
-        });
-      } catch (error) {
-        console.error('Error loading upload history:', error);
-        historyList.innerHTML = `
+            historyList.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error loading upload history:", error);
+          historyList.innerHTML = `
           <tr>
             <td colspan="4" class="text-center text-danger">
               Gagal memuat riwayat upload: ${error.message}
             </td>
           </tr>
         `;
+        }
       }
-    }
 
-    // Initialize AOS
-    AOS.init();
-  </script>
-</body>
+      // Initialize AOS
+      AOS.init();
+    </script>
+  </body>
 </html>
