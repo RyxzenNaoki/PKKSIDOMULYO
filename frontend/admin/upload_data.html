@@ -855,51 +855,67 @@
         }
       }
 
-      // Function to load and display data
-      async function loadData() {
-        const tableBody = document.getElementById("dasawismaTableBody");
-        tableBody.innerHTML = "";
+     
+// Function to load and display data
+async function loadData() {
+  const tableBody = document.getElementById("dasawismaTableBody");
+  if (!tableBody) {
+    console.error("Table body element not found");
+    return;
+  }
+  
+  // Clear existing content
+  tableBody.innerHTML = "";
 
-        try {
-          const querySnapshot = await getDocs(collection(db, "dasawisma"));
-          querySnapshot.forEach((document) => {
-            const data = document.data();
-            const row = document.createElement("tr");
-            row.innerHTML = `
-        <td>${data.namaDasawisma}</td>
-        <td>${data.tanggal}</td>
-        <td>
-          <button class="btn btn-sm btn-primary edit-btn" data-id="${document.id}">
-            <i class="bi bi-pencil"></i> Edit
-          </button>
-          <button class="btn btn-sm btn-danger delete-btn" data-id="${document.id}">
-            <i class="bi bi-trash"></i> Hapus
-          </button>
-        </td>
+  try {
+    const querySnapshot = await getDocs(collection(db, "dasawisma"));
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const tr = tableBody.insertRow();
+      
+      // Create cells for each column
+      const nameCell = tr.insertCell();
+      const dateCell = tr.insertCell();
+      const actionCell = tr.insertCell();
+      
+      // Set content for each cell
+      nameCell.textContent = data.namaDasawisma;
+      dateCell.textContent = data.tanggal;
+      
+      // Create action buttons
+      actionCell.innerHTML = `
+        <button class="btn btn-sm btn-primary edit-btn" data-id="${doc.id}">
+          <i class="bi bi-pencil"></i> Edit
+        </button>
+        <button class="btn btn-sm btn-danger delete-btn" data-id="${doc.id}">
+          <i class="bi bi-trash"></i> Hapus
+        </button>
       `;
-
-            // Add delete button handler
-            row
-              .querySelector(".delete-btn")
-              .addEventListener("click", async () => {
-                if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-                  await deleteDocument(document.id);
-                }
-              });
-
-            // Edit button handler tetap sama
-            row.querySelector(".edit-btn").addEventListener("click", () => {
-              populateEditForm(document.id, data);
-              editModal.show();
-            });
-
-            tableBody.appendChild(row);
-          });
-        } catch (error) {
-          console.error("Error loading data:", error);
-          alert("Gagal memuat data: " + error.message);
+      
+      // Add event listeners for buttons
+      const editBtn = actionCell.querySelector('.edit-btn');
+      const deleteBtn = actionCell.querySelector('.delete-btn');
+      
+      editBtn.addEventListener('click', () => {
+        populateEditForm(doc.id, data);
+        editModal.show();
+      });
+      
+      deleteBtn.addEventListener('click', async () => {
+        if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+          await deleteDocument(doc.id);
         }
-      }
+      });
+    });
+  } catch (error) {
+    console.error("Error loading data:", error);
+    const errorAlert = document.createElement('div');
+    errorAlert.className = 'alert alert-danger';
+    errorAlert.textContent = `Gagal memuat data: ${error.message}`;
+    tableBody.parentNode.insertBefore(errorAlert, tableBody);
+  }
+}
 
       // Helper function untuk mengisi form edit
       function populateEditForm(docId, data) {
