@@ -207,7 +207,8 @@
 
       let currentUser = null;
 
-      const MAX_FILE_SIZE = 10 * 1024 * 1024;
+      const MAX_FILE_SIZE = 4.5 * 1024 * 1024; // 4.5 MB in bytes
+      const MAX_FILE_SIZE_TEXT = "4.5 MB";
 
       // Auth state observer
       onAuthStateChanged(auth, (user) => {
@@ -301,8 +302,14 @@
               // Show error message
               messageElement.innerHTML = `
         <div class="alert alert-danger">
-          File terlalu besar! Maksimal ukuran file adalah 10 MB. 
-          File Anda berukuran ${(file.size / (1024 * 1024)).toFixed(2)} MB.
+          <h5 class="alert-heading">File Terlalu Besar!</h5>
+          <p>Karena batasan server, maksimal ukuran file adalah ${MAX_FILE_SIZE_TEXT}.</p>
+          <hr>
+          <p class="mb-0">File Anda berukuran ${(
+            file.size /
+            (1024 * 1024)
+          ).toFixed(2)} MB. 
+          Silakan kompres file Anda terlebih dahulu atau pilih file yang lebih kecil.</p>
         </div>
       `;
               // Reset file label
@@ -324,15 +331,22 @@
             // Update file label and info
             document.querySelector(".custom-file-label").textContent =
               file.name;
-            fileInfo.textContent = `Type: ${file.type} | Size: ${(
-              file.size / 1024
-            ).toFixed(2)} KB`;
+            const fileSizeText =
+              file.size > 1024 * 1024
+                ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
+                : `${(file.size / 1024).toFixed(2)} KB`;
+            fileInfo.innerHTML = `
+      <div class="mt-2">
+        <strong>Tipe File:</strong> ${file.type}<br>
+        <strong>Ukuran:</strong> ${fileSizeText} (Maksimal ${MAX_FILE_SIZE_TEXT})
+      </div>
+    `;
             // Enable upload button
             uploadButton.disabled = false;
           }
         });
 
-      // Modified upload function with size validation
+      // Modified upload function with improved error handling
       window.uploadFile = async () => {
         if (!currentUser) {
           alert("Silakan login terlebih dahulu!");
@@ -372,8 +386,13 @@
         if (file.size > MAX_FILE_SIZE) {
           messageElement.innerHTML = `
       <div class="alert alert-danger">
-        File terlalu besar! Maksimal ukuran file adalah 10 MB. 
-        File Anda berukuran ${(file.size / (1024 * 1024)).toFixed(2)} MB.
+        <h5 class="alert-heading">File Terlalu Besar!</h5>
+        <p>Maksimal ukuran file adalah ${MAX_FILE_SIZE_TEXT}.</p>
+        <hr>
+        <p class="mb-0">File Anda berukuran ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(2)} MB.</p>
       </div>
     `;
           return;
@@ -383,17 +402,22 @@
         progressBar.style.display = "block";
         uploadButton.disabled = true;
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("title", imageTitle || file.name);
-
         try {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("title", imageTitle || file.name);
+
           const response = await fetch("/api/upload", {
             method: "POST",
             body: formData,
           });
 
           if (!response.ok) {
+            if (response.status === 413) {
+              throw new Error(
+                "File terlalu besar untuk diupload. Silakan gunakan file yang lebih kecil."
+              );
+            }
             throw new Error(`Upload gagal: ${response.statusText}`);
           }
 
@@ -414,7 +438,14 @@
 
             messageElement.innerHTML = `
         <div class="alert alert-success">
-          File berhasil diupload! <a href="${data.fileUrl}" target="_blank">Lihat foto</a>
+          <h5 class="alert-heading">Upload Berhasil!</h5>
+          <p>File Anda telah berhasil diupload.</p>
+          <hr>
+          <p class="mb-0">
+            <a href="${data.fileUrl}" target="_blank" class="btn btn-sm btn-success">
+              <i class="bi bi-eye"></i> Lihat Foto
+            </a>
+          </p>
         </div>
       `;
 
@@ -426,7 +457,8 @@
         } catch (error) {
           messageElement.innerHTML = `
       <div class="alert alert-danger">
-        ${error.message}
+        <h5 class="alert-heading">Upload Gagal</h5>
+        <p>${error.message}</p>
       </div>
     `;
         } finally {
