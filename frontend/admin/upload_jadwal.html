@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload Jadwal Posyandu</title>
+  <title>Manajemen Jadwal Posyandu</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -44,33 +44,85 @@
 
   <main id="main">
     <div class="container mt-5 pt-4">
-      <h2>Form Jadwal Posyandu</h2>
-      <div class="card">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manajemen Jadwal Posyandu</h2>
+        <button class="btn btn-primary" id="addNewBtn">Tambah Jadwal Baru</button>
+      </div>
+
+      <!-- Table to display schedules -->
+      <div class="card mb-4">
         <div class="card-body">
-          <form id="posyanduForm">
-            <div class="mb-3">
-              <label for="namaPosyandu" class="form-label">Nama Posyandu:</label>
-              <select class="form-select" id="namaPosyandu" required>
-                <option value="">Pilih Posyandu</option>
-                <option value="Posyandu Tebelo">Posyandu Tebelo</option>
-                <option value="Posyandu Mangunrejo">Posyandu Mangunrejo</option>
-                <option value="Posyandu Sumberkreco">Posyandu Sumberkreco</option>
-                <option value="Posyandu Bareng">Posyandu Bareng</option>
-              </select>
-            </div>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Nama Posyandu</th>
+                  <th>Jadwal</th>
+                  <th>Tanggal Update</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="scheduleTableBody">
+                <!-- Data will be populated here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-            <div class="mb-3">
-              <label for="jadwalPosyandu" class="form-label">Jadwal Posyandu:</label>
-              <input type="text" class="form-control" id="jadwalPosyandu" 
-                     placeholder="Contoh: Setiap hari Senin minggu pertama, pukul 08.00 WIB" required>
+      <!-- Form Modal -->
+      <div class="modal fade" id="scheduleModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalTitle">Tambah Jadwal Posyandu</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+            <div class="modal-body">
+              <form id="posyanduForm">
+                <input type="hidden" id="documentId">
+                <div class="mb-3">
+                  <label for="namaPosyandu" class="form-label">Nama Posyandu:</label>
+                  <select class="form-select" id="namaPosyandu" required>
+                    <option value="">Pilih Posyandu</option>
+                    <option value="Posyandu Tebelo">Posyandu Tebelo</option>
+                    <option value="Posyandu Mangunrejo">Posyandu Mangunrejo</option>
+                    <option value="Posyandu Sumberkreco">Posyandu Sumberkreco</option>
+                    <option value="Posyandu Bareng">Posyandu Bareng</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="jadwalPosyandu" class="form-label">Jadwal Posyandu:</label>
+                  <input type="text" class="form-control" id="jadwalPosyandu" 
+                         placeholder="Contoh: Setiap hari Senin minggu pertama, pukul 08.00 WIB" required>
+                </div>
+              </form>
+              <div id="status" class="mt-3"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" id="saveButton">Simpan</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="d-flex justify-content-between">
-              <button type="submit" class="btn btn-primary">Simpan Jadwal</button>
-              <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+      <!-- Delete Confirmation Modal -->
+      <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Konfirmasi Hapus</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-          </form>
-          <div id="status" class="mt-3"></div>
+            <div class="modal-body">
+              <p>Apakah Anda yakin ingin menghapus jadwal ini?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,7 +140,18 @@
   <script type="module">
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      getDocs, 
+      doc, 
+      updateDoc, 
+      deleteDoc,
+      serverTimestamp,
+      query,
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js';
 
     const firebaseConfig = {
@@ -107,12 +170,18 @@
     const auth = getAuth(app);
 
     let currentUser = null;
+    let scheduleToDelete = null;
+
+    // Bootstrap Modal instances
+    const scheduleModal = new bootstrap.Modal(document.getElementById('scheduleModal'));
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
     // Check authentication state
     onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUser = user;
         document.getElementById('userEmail').textContent = user.email;
+        loadSchedules(); // Load schedules when user is authenticated
       } else {
         window.location.href = '/login';
       }
@@ -129,9 +198,154 @@
       }
     });
 
-    // Form handler
-    const posyanduForm = document.getElementById('posyanduForm');
-    const statusDiv = document.getElementById('status');
+    // Load schedules
+    async function loadSchedules() {
+      const tableBody = document.getElementById('scheduleTableBody');
+      tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Loading...</td></tr>';
+
+      try {
+        const schedulesQuery = query(collection(db, 'jadwalPosyandu'), orderBy('timestamp', 'desc'));
+        const querySnapshot = await getDocs(schedulesQuery);
+        
+        if (querySnapshot.empty) {
+          tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Belum ada jadwal tersimpan</td></tr>';
+          return;
+        }
+
+        tableBody.innerHTML = '';
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const row = `
+            <tr>
+              <td>${data.namaPosyandu}</td>
+              <td>${data.jadwalPosyandu}</td>
+              <td>${data.tanggal}</td>
+              <td>
+                <button class="btn btn-sm btn-primary edit-btn" data-id="${doc.id}">Edit</button>
+                <button class="btn btn-sm btn-danger delete-btn" data-id="${doc.id}">Hapus</button>
+              </td>
+            </tr>
+          `;
+          tableBody.innerHTML += row;
+        });
+
+        // Add event listeners to edit and delete buttons
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', () => editSchedule(btn.dataset.id));
+        });
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', () => showDeleteConfirmation(btn.dataset.id));
+        });
+
+      } catch (error) {
+        console.error('Error loading schedules:', error);
+        tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading schedules</td></tr>';
+      }
+    }
+
+    // Add New button handler
+    document.getElementById('addNewBtn').addEventListener('click', () => {
+      document.getElementById('modalTitle').textContent = 'Tambah Jadwal Posyandu';
+      document.getElementById('documentId').value = '';
+      document.getElementById('posyanduForm').reset();
+      scheduleModal.show();
+    });
+
+    // Edit schedule
+    async function editSchedule(docId) {
+      try {
+        const docRef = doc(db, 'jadwalPosyandu', docId);
+        const docSnap = await getFirestore(docRef);
+        const data = docSnap.data();
+
+        document.getElementById('modalTitle').textContent = 'Edit Jadwal Posyandu';
+        document.getElementById('documentId').value = docId;
+        document.getElementById('namaPosyandu').value = data.namaPosyandu;
+        document.getElementById('jadwalPosyandu').value = data.jadwalPosyandu;
+
+        scheduleModal.show();
+      } catch (error) {
+        console.error('Error loading schedule for edit:', error);
+        alert('Gagal memuat data jadwal. Silakan coba lagi.');
+      }
+    }
+
+    // Save button handler
+    document.getElementById('saveButton').addEventListener('click', async () => {
+      const form = document.getElementById('posyanduForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const docId = document.getElementById('documentId').value;
+      const data = {
+        namaPosyandu: document.getElementById('namaPosyandu').value,
+        jadwalPosyandu: document.getElementById('jadwalPosyandu').value,
+        timestamp: serverTimestamp(),
+        authorEmail: currentUser.email,
+        tanggal: new Date().toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        })
+      };
+
+      try {
+        if (docId) {
+          // Update existing document
+          await updateDoc(doc(db, 'jadwalPosyandu', docId), data);
+        } else {
+          // Add new document
+          await addDoc(collection(db, 'jadwalPosyandu'), data);
+        }
+
+        scheduleModal.hide();
+        loadSchedules();
+        showAlert('success', 'Jadwal berhasil disimpan!');
+      } catch (error) {
+        console.error('Error saving schedule:', error);
+        showAlert('danger', `Gagal menyimpan jadwal: ${error.message}`);
+      }
+    });
+
+    // Delete confirmation
+    function showDeleteConfirmation(docId) {
+      scheduleToDelete = docId;
+      deleteModal.show();
+    }
+
+    // Confirm delete handler
+    document.getElementById('confirmDelete').addEventListener('click', async () => {
+      if (!scheduleToDelete) return;
+
+      try {
+        await deleteDoc(doc(db, 'jadwalPosyandu', scheduleToDelete));
+        deleteModal.hide();
+        loadSchedules();
+        showAlert('success', 'Jadwal berhasil dihapus!');
+      } catch (error) {
+        console.error('Error deleting schedule:', error);
+        showAlert('danger', `Gagal menghapus jadwal: ${error.message}`);
+      }
+      scheduleToDelete = null;
+    });
+
+    // Helper function to show alerts
+    function showAlert(type, message) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+      alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+      document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.card'));
+      
+      // Auto dismiss after 3 seconds
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 3000);
+    }
 
     // Helper function to get form value or '-' if empty
     const getFormValue = (id) => {
@@ -139,53 +353,131 @@
       return value === '' ? '-' : value;
     };
 
-    posyanduForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Reset form and status when modal is closed
+    document.getElementById('scheduleModal').addEventListener('hidden.bs.modal', () => {
+      document.getElementById('posyanduForm').reset();
+      document.getElementById('status').innerHTML = '';
+      document.getElementById('documentId').value = '';
+    });
 
-      if (!currentUser) {
-        statusDiv.innerHTML = '<div class="alert alert-danger">Anda harus login untuk menyimpan jadwal</div>';
-        return;
+    // Initialize modals and load data
+    document.addEventListener('DOMContentLoaded', () => {
+      // Automatically load schedules if user is already authenticated
+      if (currentUser) {
+        loadSchedules();
+      }
+    });
+
+    // Add keyboard event listener for modal
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        scheduleModal.hide();
+        deleteModal.hide();
+      }
+    });
+
+    // Error handling wrapper for async functions
+    const asyncHandler = (fn) => {
+      return (...args) => {
+        fn(...args).catch((error) => {
+          console.error('Error:', error);
+          showAlert('danger', `An error occurred: ${error.message}`);
+        });
+      };
+    };
+
+    // Wrap async event handlers with error handling
+    const safeLoadSchedules = asyncHandler(loadSchedules);
+    const safeEditSchedule = asyncHandler(editSchedule);
+
+    // Add event listener for form submission to prevent default
+    document.getElementById('posyanduForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+
+    // Utility function to format date
+    function formatDate(date) {
+      return new Date(date).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Function to validate form data
+    function validateFormData() {
+      const namaPosyandu = getFormValue('namaPosyandu');
+      const jadwalPosyandu = getFormValue('jadwalPosyandu');
+
+      if (!namaPosyandu || namaPosyandu === '-') {
+        showAlert('danger', 'Nama Posyandu harus diisi');
+        return false;
       }
 
-      const submitButton = posyanduForm.querySelector('button[type="submit"]');
-      submitButton.disabled = true;
-      statusDiv.innerHTML = '<div class="alert alert-info">Menyimpan jadwal...</div>';
+      if (!jadwalPosyandu || jadwalPosyandu === '-') {
+        showAlert('danger', 'Jadwal Posyandu harus diisi');
+        return false;
+      }
 
+      return true;
+    }
+
+    // Function to create table row HTML
+    function createTableRow(doc) {
+      const data = doc.data();
+      return `
+        <tr>
+          <td>${data.namaPosyandu}</td>
+          <td>${data.jadwalPosyandu}</td>
+          <td>${data.tanggal}</td>
+          <td>
+            <button class="btn btn-sm btn-primary edit-btn" data-id="${doc.id}">
+              <i class="bi bi-pencil"></i> Edit
+            </button>
+            <button class="btn btn-sm btn-danger delete-btn" data-id="${doc.id}">
+              <i class="bi bi-trash"></i> Hapus
+            </button>
+          </td>
+        </tr>
+      `;
+    }
+
+    // Function to refresh table data
+    async function refreshTableData() {
+      await loadSchedules();
+      showAlert('success', 'Data berhasil diperbarui');
+    }
+
+    // Export functionality
+    document.getElementById('exportBtn')?.addEventListener('click', async () => {
       try {
-        const data = {
-          namaPosyandu: getFormValue('namaPosyandu'),
-          jadwalPosyandu: getFormValue('jadwalPosyandu'),
-          
-          // Metadata
-          timestamp: serverTimestamp(),
-          authorEmail: currentUser.email,
-          createdAt: new Date().toISOString(),
-          tanggal: new Date().toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-          })
-        };
+        const querySnapshot = await getDocs(collection(db, 'jadwalPosyandu'));
+        const data = querySnapshot.docs.map(doc => {
+          const docData = doc.data();
+          return {
+            namaPosyandu: docData.namaPosyandu,
+            jadwalPosyandu: docData.jadwalPosyandu,
+            tanggal: docData.tanggal,
+            authorEmail: docData.authorEmail
+          };
+        });
 
-        // Add document to Firestore
-        await addDoc(collection(db, 'jadwalPosyandu'), data);
+        const csvContent = "data:text/csv;charset=utf-8," 
+          + "Nama Posyandu,Jadwal Posyandu,Tanggal Update,Pembuat\n"
+          + data.map(row => Object.values(row).join(",")).join("\n");
 
-        // Show success message
-        statusDiv.innerHTML = '<div class="alert alert-success">Jadwal berhasil disimpan!</div>';
-        
-        // Reset form
-        posyanduForm.reset();
-
-        // Redirect to dashboard after 2 seconds
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 2000);
-
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "jadwal_posyandu.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       } catch (error) {
-        console.error('Error saving schedule:', error);
-        statusDiv.innerHTML = `<div class="alert alert-danger">Gagal menyimpan jadwal: ${error.message}</div>`;
-      } finally {
-        submitButton.disabled = false;
+        console.error('Error exporting data:', error);
+        showAlert('danger', 'Gagal mengekspor data');
       }
     });
   </script>
