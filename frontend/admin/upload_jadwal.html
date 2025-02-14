@@ -144,7 +144,8 @@
       getFirestore, 
       collection, 
       addDoc, 
-      getDocs, 
+      getDocs,
+      getDoc, 
       doc, 
       updateDoc, 
       deleteDoc,
@@ -253,23 +254,27 @@
 
     // Edit schedule
     async function editSchedule(docId) {
-      try {
-        const docRef = doc(db, 'jadwalPosyandu', docId);
-        const docSnap = await getFirestore(docRef);
-        const data = docSnap.data();
+  try {
+    const docRef = doc(db, 'jadwalPosyandu', docId);
+    const docSnap = await getDoc(docRef); // Changed from getFirestore to getDoc
+    
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      
+      document.getElementById('modalTitle').textContent = 'Edit Jadwal Posyandu';
+      document.getElementById('documentId').value = docId;
+      document.getElementById('namaPosyandu').value = data.namaPosyandu;
+      document.getElementById('jadwalPosyandu').value = data.jadwalPosyandu;
 
-        document.getElementById('modalTitle').textContent = 'Edit Jadwal Posyandu';
-        document.getElementById('documentId').value = docId;
-        document.getElementById('namaPosyandu').value = data.namaPosyandu;
-        document.getElementById('jadwalPosyandu').value = data.jadwalPosyandu;
-
-        scheduleModal.show();
-      } catch (error) {
-        console.error('Error loading schedule for edit:', error);
-        alert('Gagal memuat data jadwal. Silakan coba lagi.');
-      }
+      scheduleModal.show();
+    } else {
+      throw new Error('Jadwal tidak ditemukan');
     }
-
+  } catch (error) {
+    console.error('Error loading schedule for edit:', error);
+    alert('Gagal memuat data jadwal. Silakan coba lagi.');
+  }
+}
     // Save button handler
     document.getElementById('saveButton').addEventListener('click', async () => {
       const form = document.getElementById('posyanduForm');
