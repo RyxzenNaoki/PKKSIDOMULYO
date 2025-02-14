@@ -298,7 +298,7 @@
             userId: currentUser.uid,
             title: imageTitle || file.name,
             fileId: data.fileId,
-            fileUrl: data.fileUrl,
+            fileUrl: `https://drive.google.com/thumbnail?id=${data.fileId}&sz=w1000`,
             timestamp: new Date().toISOString(),
             type: 'image',
             mimeType: file.type
